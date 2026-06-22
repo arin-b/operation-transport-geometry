@@ -1,0 +1,5 @@
+world:
+  name: risk_degradation
+  dim: 2
+transport:
+  solver: sinkhorn

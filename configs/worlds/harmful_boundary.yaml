@@ -1,0 +1,5 @@
+world:
+  name: harmful_boundary
+  dim: 2
+transport:
+  solver: sinkhorn

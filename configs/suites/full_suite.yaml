@@ -1,0 +1,29 @@
+base_config: configs/default.yaml
+worlds:
+  - name: harmless_nuisance
+  - name: harmful_boundary
+  - name: invariance_misspecification
+  - name: risk_degradation
+    overrides:
+      risk:
+        mode: noisy
+  - name: sample_complexity
+    overrides:
+      runtime:
+        preset: fast
+  - name: high_dimensional
+    overrides:
+      world:
+        dim: 20
+      cost:
+        mode: operational_only
+  - name: admissibility_stress
+    overrides:
+      admissibility:
+        mode: hard
+  - name: unbalanced_dangerous_mass
+    overrides:
+      transport:
+        solver: unbalanced
+      admissibility:
+        mode: hybrid

@@ -1,0 +1,5 @@
+world:
+  name: sample_complexity
+  dim: 2
+transport:
+  solver: sinkhorn

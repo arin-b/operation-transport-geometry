@@ -1,0 +1,7 @@
+include README.md
+include FINAL_VALIDATION.md
+recursive-include configs *.yaml
+recursive-include notes *.md
+recursive-include docs *.md
+recursive-include examples *.py
+recursive-include scripts *.sh

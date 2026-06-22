@@ -1,0 +1,5 @@
+world:
+  name: unbalanced_dangerous_mass
+  dim: 2
+transport:
+  solver: unbalanced

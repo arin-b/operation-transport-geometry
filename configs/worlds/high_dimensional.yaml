@@ -1,0 +1,5 @@
+world:
+  name: high_dimensional
+  dim: 20
+transport:
+  solver: sinkhorn

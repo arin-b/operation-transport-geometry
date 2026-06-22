@@ -1,0 +1,5 @@
+world:
+  name: harmless_nuisance
+  dim: 2
+transport:
+  solver: sinkhorn

@@ -1,0 +1,96 @@
+world:
+  name: harmful_boundary
+  dim: 2
+  n: 100
+  failure_threshold: 0.75
+  risk_sharpness: 10.0
+  nuisance_leak: 0.05
+  hidden_leak: 0.15
+
+runtime:
+  preset: fast
+
+seed:
+  master: 0
+
+nodes:
+  selected:
+    - repr
+
+uncertainty:
+  node_noise: 0.05
+  terminal_noise: 0.03
+  rollout_terminal_noise: 0.12
+  hidden_nuisance: true
+
+risk:
+  mode: "true"
+  noise_std: 0.10
+  train_fraction: 0.70
+  features: state
+  sklearn_regressor: ridge
+  sklearn_classifier: logistic
+  ridge_alpha: 0.01
+  logistic_max_iter: 500
+  mlp_backend: sklearn
+  mlp_hidden: [64, 64]
+  mlp_max_iter: 400
+  torch_epochs: 250
+  torch_lr: 0.001
+
+cost:
+  mode: full
+  weights:
+    geometry: 1.0
+    output: 1.0
+    terminal: 1.0
+    risk: 2.0
+    invariance: 3.0
+    operational_coordinate: 1.5
+    nuisance: 0.15
+
+admissibility:
+  mode: hybrid
+  risk_tolerance: 0.25
+  severe_risk_tolerance: 0.65
+  operational_tolerance: 1.50
+  severe_operational_tolerance: 3.00
+  descriptor_tolerance: 1.50
+  hard_threshold: 3.0
+  soft_threshold: 2.0
+  severe_threshold: 6.0
+  adaptive_base_threshold: 3.0
+  anchor_weight: 2.0
+  risk_weight: 1.0
+  operational_weight: 1.0
+  descriptor_weight: 0.5
+  nuisance_weight: 0.0
+
+transport:
+  solver: masked_sinkhorn
+  epsilon: 0.05
+  sinkhorn_iter: 500
+  unbalanced_reg_m: 1.0
+  unbalanced_cost_quantile: 0.85
+  forbidden_cost: 1000000.0
+
+aggregation:
+  mode: weighted_sum
+  weights:
+    repr: 1.0
+
+
+diagnostics:
+  thresholds:
+    risk_estimation_mae_ok: 0.20
+    risk_calibration_error_ok: 0.20
+    false_collapse_mass_ok: 0.15
+    forbidden_mass_ok: 0.0001
+    row_l1_error_ok: 0.001
+    col_l1_error_ok: 0.001
+    allowed_pair_fraction_min: 0.05
+    row_feasible_fraction_min: 0.80
+    col_feasible_fraction_min: 0.80
+    harmless_shift_collapse_min: 0.30
+    harmful_shift_detection_min: 0.10
+    dangerous_unmatched_mass_min: 0.05

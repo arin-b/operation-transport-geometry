@@ -1,0 +1,1148 @@
+
+\documentclass[11pt,a4paper]{article}
+\usepackage[a4paper,margin=0.82in]{geometry}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{tgtermes}
+\else
+  \usepackage{fontspec}
+  \setmainfont{TeXGyreTermes}
+\fi
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{pdflscape}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{ragged2e}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage[hidelinks]{hyperref}
+\usepackage{microtype}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.58em}
+\setlength{\headheight}{14.5pt}
+\setlength{\LTpre}{5pt}
+\setlength{\LTpost}{8pt}
+\renewcommand{\arraystretch}{1.17}
+\newcolumntype{P}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+\newcommand{\tabletitle}[1]{\vspace{0.4em}{\large\bfseries #1}\vspace{0.2em}}
+\titleformat{\section}{\Large\bfseries}{\thesection}{0.7em}{}
+\titleformat{\subsection}{\large\bfseries}{\thesubsection}{0.7em}{}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{OT Operational Final Resolved}
+\rhead{R1--R50}
+\cfoot{\thepage}
+\emergencystretch=3em
+\sloppy
+\begin{document}
+\section*{R1. Lock the paper's central thesis.}
+\addcontentsline{toc}{section}{R1. Lock the paper's central thesis.}
+
+\subsection*{Question}
+
+Resolve the exact one-sentence claim of the paper: terminal operational behavior can induce a geometry on internal representation distributions, and this geometry determines which shifts may be collapsed and which must remain separated.
+
+\subsection*{Answer}
+
+A deployed multi-stage system can be modeled as a finite directed acyclic graph of state-producing modules; terminal operational evaluation of the final system output then induces node-wise operational risks on internal representation spaces, and these risks define operational transport costs and admissible couplings between domain-induced node laws, so that the resulting transport geometry collapses operationally harmless variation while assigning positive cost or inadmissibility to variation that changes downstream operational behavior.
+
+\section*{R2. Lock the contribution boundary.}
+\addcontentsline{toc}{section}{R2. Lock the contribution boundary.}
+
+\subsection*{Question}
+
+Decide what the paper is not claiming. It should not claim to solve all domain adaptation, all safe representation learning, or all decision-focused learning. It should claim a specific mathematical object: operational-risk-induced transport geometry over node-wise representation laws.
+
+\subsection*{Answer}
+
+This paper defines operational transport geometry for deployed multi-stage systems. A deployed system is modeled as a finite directed acyclic graph whose internal nodes carry representation states and whose terminal output is judged by an operational evaluation. This terminal evaluation induces node-wise risk functions on internal representation spaces, and these risks are used to define operational ground costs, admissible coupling classes, and transport-type discrepancies between domain-induced node laws. The contribution is a mathematical framework for characterizing when internal representation variation is operationally substitutable, collapsible, costly, or inadmissible under downstream system behavior.
+
+\section*{R3. Choose the final title and object name.}
+\addcontentsline{toc}{section}{R3. Choose the final title and object name.}
+
+\subsection*{Question}
+
+Pick one stable name for the framework, such as ``Operational Transport Geometry'' or ``Operational-Risk-Induced Transport Geometry,'' and use it consistently across title, abstract, definitions, figures, and theorem statements.
+
+\subsection*{Answer}
+
+The framework will be called Operational Transport Geometry. The preferred paper title is ``Operational Transport Geometry for Representation Learning under Deployment Shift.'' In the paper, ``operational'' refers to downstream system behavior as judged at the terminal output, while ``transport geometry'' refers to the costs, admissible couplings, and transport-type discrepancies induced on domain-specific internal representation laws. The phrase ``operational-risk-induced transport geometry'' will be used only as a technical description of the construction, not as the primary name. The main notation should remain stable: node-wise operational risk as \(r_v\), operational ground cost as \(c_{v,op}\), admissible coupling class as \(\Pi_{v,adm}\), node-wise operational transport as \(W_{v,op}\), and system-level operational discrepancy as \(D_op\).
+
+\section*{R4. Define the intended reader.}
+\addcontentsline{toc}{section}{R4. Define the intended reader.}
+
+\subsection*{Question}
+
+Decide whether the paper is written primarily for optimal transport theorists, foundations of ML reviewers, representation-learning reviewers, or applied CPS reviewers. This affects how much OT background, ML motivation, and streetlight detail should appear in the main text.
+
+\subsection*{Answer}
+
+The intended primary reader is a mathematical machine learning or foundations-of-ML reader who is comfortable with probability measures, representation learning, and optimal transport, but who should not be assumed to know the streetlight-auditing deployment context. The paper should therefore be written as a theory-first ML paper: the main text introduces only the optimal transport, measurable-system, and representation-learning notation needed for the construction, while the streetlight system is used as a running applied instantiation rather than as the main object of the paper. Secondary readers include domain adaptation researchers, robust representation learning researchers, and cyber-physical systems researchers interested in deployment-sensitive model behavior.
+
+\section*{R5. Freeze the paper type.}
+\addcontentsline{toc}{section}{R5. Freeze the paper type.}
+
+\subsection*{Question}
+
+Classify the paper internally as a theory-first mathematical ML paper with an applied motivating instantiation, not as a systems paper and not as a streetlight-auditing paper.
+
+\subsection*{Answer}
+
+The paper should be classified as a theory-first mathematical machine learning paper with an applied motivating instantiation. Its primary object is the formal construction of Operational Transport Geometry: a framework in which terminal operational evaluation induces node-wise risks, and those risks define transport costs, admissible couplings, and discrepancies between domain-induced representation laws. The streetlight-auditing pipeline should be used to motivate, instantiate, and interpret the framework, but the paper's central contribution remains the mathematical formulation rather than a deployed system, benchmark, or engineering pipeline.
+
+\begin{landscape}
+\normalsize
+\section*{R6. Construct the notation table.}
+\addcontentsline{toc}{section}{R6. Construct the notation table.}
+
+\subsection*{Question}
+
+Create a full notation table before writing the final draft. It must include the DAG, nodes, node spaces, representation manifolds, domains, node laws, terminal map, operational evaluation, risk, safe/failure regions, semantic descriptors, ground costs, admissible couplings, transport distances, safe target laws, and aggregation map.
+
+\subsection*{Answer}
+
+The paper should use the following notation table as the master notation contract. The table separates primitive objects, induced objects, selectable modeling objects, learned objects, and derived transport objects. A symbol should not be reused for a different purpose later in the paper.
+\scriptsize
+\tabletitle{Table 1. Basic spaces, measures, and probability notation}
+\begin{longtable}{@{}P{0.13\linewidth} P{0.19\linewidth} P{0.21\linewidth} P{0.16\linewidth} P{0.23\linewidth}@{}}
+\toprule
+\textbf{Symbol} & \textbf{Meaning} & \textbf{Type / domain} & \textbf{Status} & \textbf{Notes}\\
+\midrule
+\endfirsthead
+\toprule
+\multicolumn{5}{@{}l}{\textit{Table 1 continued.}}\\
+\midrule
+\textbf{Symbol} & \textbf{Meaning} & \textbf{Type / domain} & \textbf{Status} & \textbf{Notes}\\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\(\mathcal{X}\) & Input space & Measurable or Polish space & Primitive & Space of raw deployment inputs, for example video frames, clips, sensor packets, or image sequences.\\
+\(x\) & Input sample & \(x \in X\) & Primitive sample & One realized input from a deployment domain.\\
+\(Z\) & Generic state space & Standard Borel or Polish space & Primitive generic object & Used when a statement does not depend on a particular node.\\
+\(d_Z\) & Metric on Z & \(d_Z: Z \times Z \to \mathbb{R}_+\) & Primitive when needed & Used only when metric structure is required.\\
+\(\mathcal{B}(Z)\) & Borel sigma-algebra on Z & Sigma-algebra & Primitive & Usually implicit once Z is Polish or standard Borel.\\
+\(\mathcal{P}(Z)\) & Probability measures on Z & Set of Borel probability measures & Primitive & Ambient space for laws.\\
+\(\mathcal{P}_p(Z)\) & Probability measures with finite p-th moment & Subset of P(Z) & Primitive & Needed for Wasserstein-type objects.\\
+\(\mu,\nu\) & Generic probability measures & Elements of \(\mathcal{P}(Z)\) or \(\mathcal{P}_p(Z)\) & Primitive generic measures & Used for abstract OT statements.\\
+\(p\) & Moment / Wasserstein exponent & \(p \geq 1\) & Primitive parameter & Fixed throughout a theorem or construction.\\
+\(f\) & Generic measurable map & \(f: Z \to Z'\) & Primitive generic map & Used in pushforward definitions.\\
+\(f_{\#}\mu\) & Pushforward of mu by f & Probability measure on \(Z'\) & Induced & Defined by \(f_{\#}\mu(A)=\mu(f^{-1}(A))\).\\
+\(\operatorname{pr}_1,\operatorname{pr}_2\) & Coordinate projections & \(\operatorname{pr}_1(z,z')=z,\ \operatorname{pr}_2(z,z')=z'\) & Primitive maps & Used to define couplings.\\
+\(\mathbb{R}_{+}\) & Nonnegative real line & \([0,\infty)\) & Primitive & Codomain for costs and risks.\\
+\end{longtable}
+\scriptsize
+\tabletitle{Table 2. Graph and deployed-system notation}
+\begin{longtable}{@{}P{0.13\linewidth} P{0.19\linewidth} P{0.21\linewidth} P{0.16\linewidth} P{0.23\linewidth}@{}}
+\toprule
+\textbf{Symbol} & \textbf{Meaning} & \textbf{Type / domain} & \textbf{Status} & \textbf{Notes}\\
+\midrule
+\endfirsthead
+\toprule
+\multicolumn{5}{@{}l}{\textit{Table 2 continued.}}\\
+\midrule
+\textbf{Symbol} & \textbf{Meaning} & \textbf{Type / domain} & \textbf{Status} & \textbf{Notes}\\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\(\mathcal{G}\) & Deployed system graph & \(G=(V,E)\) & Primitive modeling object & Mathematical model of the deployed multi-stage system.\\
+\(V\) & Node set & Finite set & Primitive & Each node corresponds to a module, state, representation, estimator, controller, or decision stage.\\
+\(E\) & Directed edge set & Subset of \(V \times V\) & Primitive & Edges represent information flow between modules.\\
+\(v\) & Node index & \(v \in V\) & Index & Generic internal or terminal node.\\
+\(u\) & Parent or predecessor node & \(u \in V\) & Index & Usually used when u is a parent of v.\\
+\((u,v)\) & Directed edge & Element of E & Primitive & Means information can flow from node u to node v.\\
+\(\operatorname{Pa}(v)\) & Parent set of node v & \(\{u\in V:(u,v)\in E\}\) & Induced & Inputs to node computation \(F_v\).\\
+\(\operatorname{Ch}(v)\) & Children of node v & \(\{w\in V:(v,w)\in E\}\) & Induced / optional & Useful if downstream graph structure is discussed.\\
+\(\operatorname{Anc}(v)\) & Ancestors of node v & Subset of V & Induced / optional & Nodes upstream of v.\\
+\(\operatorname{Desc}(v)\) & Descendants of node v & Subset of V & Induced / optional & Nodes downstream of v.\\
+\(T\) & Terminal node set & \(T \subset V\) & Primitive or induced & Nodes whose states determine final system output.\\
+\(I\) & Input node set & \(I \subset V\) & Optional primitive & Useful if the graph has explicit input nodes.\\
+\(Z_v\) & State space at node v & Standard Borel / Polish space & Primitive & The space in which node state \(z_v\) lives.\\
+\(z_v\) & State at node v & \(z_v \in Z_v\) & Sample / state & Internal state produced at node v.\\
+\(Z_{\operatorname{Pa}(v)}\) & Product parent state space & \(\prod_{u\in \operatorname{Pa}(v)} Z_u\) & Induced & Domain of node map \(F_v\).\\
+\(F_v\) & Node transition / node computation & \(F_v: \prod_{u\in \operatorname{Pa}(v)} Z_u \to Z_v\) & Primitive & Measurable map defining the computation at node v.\\
+\(\Phi_v\) & Upstream map to node v & \(\Phi_v: X \to Z_v\) & Induced & Map obtained by composing graph transitions from input to node v.\\
+\(G_v\) & Downstream map from node v to output & \(G_v: Z_v \to Y\) & Induced / modeling object & Used when intervening at v and executing the downstream subgraph.\\
+\(\mathcal{G}_{\mathrm{down},v}\) & Downstream subgraph from v & Subgraph induced by descendants of v & Optional notation & Use only if downstream execution needs explicit graph notation.\\
+\end{longtable}
+\scriptsize
+\tabletitle{Table 3. Representation-space and shared-space notation}
+\begin{longtable}{@{}P{0.13\linewidth} P{0.19\linewidth} P{0.21\linewidth} P{0.16\linewidth} P{0.23\linewidth}@{}}
+\toprule
+\textbf{Symbol} & \textbf{Meaning} & \textbf{Type / domain} & \textbf{Status} & \textbf{Notes}\\
+\midrule
+\endfirsthead
+\toprule
+\multicolumn{5}{@{}l}{\textit{Table 3 continued.}}\\
+\midrule
+\textbf{Symbol} & \textbf{Meaning} & \textbf{Type / domain} & \textbf{Status} & \textbf{Notes}\\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\(M_v\) & Representation manifold at node v & Smooth manifold or embedded representation space & Primitive in manifold setting & Used when node v is representation-producing.\\
+\(d_{M_v}\) & Metric or geodesic distance on \(M_v\) & \(d_{M_v}:M_v\times M_v\to\mathbb{R}_+\) & Primitive when needed & Used in geometric component of operational cost.\\
+\(M_v^{(d)}\) & Domain-specific representation space & Representation space for domain d at node v & Primitive / observed & Used when different domains realize representations in different spaces.\\
+\(\widetilde{M}_v\) & Shared representation space at node v & Common space for comparing domains & Primitive modeling object & Receives aligned representations from domain-specific spaces.\\
+\(\phi_v^{(d)}\) & Domain-specific alignment map & \(\phi_v^{(d)}: M_v^{(d)} \to \widetilde{M}_v\) & Selectable / learned & Used before cross-domain transport when node spaces differ.\\
+\(\widetilde{z}_v\) & Aligned node representation & Element of \(\widetilde{M}_v\) & Induced & Usually \(\widetilde{z}_v=\phi_v^{(d)}(z_v)\).\\
+\(\operatorname{chart}_v\) & Local chart for \(M_v\) & \(\operatorname{chart}_v: U_v \to \mathbb{R}^m\) & Optional selectable object & Use only if manifold coordinates are needed.\\
+\(\operatorname{enc}_v\) & Learned encoder for node v & \(\operatorname{enc}_v:\text{input}\to M_v\) & Optional learned object & Use only if representation states are learned rather than directly given.\\
+\(\operatorname{proj}_v\) & Projection map at node v & \(\operatorname{proj}_v:Z_v\to M_v\) or \(\widetilde{M}_v\) & Optional learned/selectable object & Useful when the paper discusses learnable coordinates or projections.\\
+\end{longtable}
+\scriptsize
+\tabletitle{Table 4. Deployment domains and induced node laws}
+\begin{longtable}{@{}P{0.13\linewidth} P{0.19\linewidth} P{0.21\linewidth} P{0.16\linewidth} P{0.23\linewidth}@{}}
+\toprule
+\textbf{Symbol} & \textbf{Meaning} & \textbf{Type / domain} & \textbf{Status} & \textbf{Notes}\\
+\midrule
+\endfirsthead
+\toprule
+\multicolumn{5}{@{}l}{\textit{Table 4 continued.}}\\
+\midrule
+\textbf{Symbol} & \textbf{Meaning} & \textbf{Type / domain} & \textbf{Status} & \textbf{Notes}\\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\(\mathcal{D}\) & Set of deployment domains & Index set & Primitive & Examples: source domain, target domain, weather condition, camera type, city region, sensor condition.\\
+\(d,d'\) & Deployment domains & Elements of \(\mathcal{D}\) & Indices & Used to compare two deployment settings.\\
+\(P_d\) & Input law for domain d & \(P_d \in \mathcal{P}(X)\) & Primitive & Distribution over raw inputs under deployment domain d.\\
+\(x\sim P_d\) & Input sampled from domain d & Random input & Primitive sampling notation & Used to define node-wise laws.\\
+\(\mu_v^d\) & Node-wise law at node v under domain d & \(\mu_v^d \in \mathcal{P}(Z_v)\) & Induced & \(\mu_v^d=\operatorname{Law}(z_v\mid x\sim P_d)=(\Phi_v)_\#P_d\).\\
+\(\widetilde{\mu}_v^d\) & Aligned node-wise law in shared space & Probability measure on \(\widetilde{M}_v\) & Induced & \(\widetilde{\mu}_v^d=(\phi_v^{(d)})_\#\mu_v^d\) when alignment is needed.\\
+\(\widehat{\mu}_v^d\) & Empirical node-wise law & Empirical measure on \(Z_v\) or \(\widetilde{M}_v\) & Estimated & Used for empirical sections, not for the core definition unless needed.\\
+\(n_d\) & Number of samples from domain d & Positive integer & Data parameter & Used only in empirical/statistical statements.\\
+\(S_d\) & Dataset from domain d & \(\{x_i^d\}_{i=1}^{n_d}\) & Observed data & Optional notation for implementation/evidence sections.\\
+\(\Delta_d\) & Deployment shift descriptor & Contextual descriptor & Optional primitive & Useful for naming shifts such as glare, blur, viewpoint, or compression.\\
+\end{longtable}
+\scriptsize
+\tabletitle{Table 5. Terminal output and operational evaluation}
+\begin{longtable}{@{}P{0.13\linewidth} P{0.19\linewidth} P{0.21\linewidth} P{0.16\linewidth} P{0.23\linewidth}@{}}
+\toprule
+\textbf{Symbol} & \textbf{Meaning} & \textbf{Type / domain} & \textbf{Status} & \textbf{Notes}\\
+\midrule
+\endfirsthead
+\toprule
+\multicolumn{5}{@{}l}{\textit{Table 5 continued.}}\\
+\midrule
+\textbf{Symbol} & \textbf{Meaning} & \textbf{Type / domain} & \textbf{Status} & \textbf{Notes}\\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\(\mathcal{Y}\) & Terminal output space & Measurable or metric space & Primitive & Space of final system outputs.\\
+\(y\) & Final output & \(y \in Y\) & Induced sample & Produced by terminal map H.\\
+\(H\) & Terminal output map & \(H:\prod_{t\in T}Z_t\to Y\) & Primitive / induced from graph & Maps terminal node states to final system output.\\
+\(\mathcal{Q}\) & Operational evaluation space & Measurable space & Primitive & Space of structured operational evaluations.\\
+\(\mathcal{E}_{\mathrm{op}}\) & Operational evaluation functional & \(\mathcal{E}_{\mathrm{op}}:Y\to Q\) & Primitive & General terminal evaluator of deployed behavior.\\
+\(L_{\mathrm{op}}\) & Scalar operational loss & \(L_{\mathrm{op}}:Y\to\mathbb{R}_+\), or \(Y\times Y_{\mathrm{target}}\times C\to\mathbb{R}_+\) & Primitive scalarization & Used when terminal evaluation is scalar.\\
+\(\mathcal{Y}_{\mathrm{target}}\) & Target output space & Measurable space & Optional primitive & Used when supervised targets are available.\\
+\(y_{\mathrm{target}}\) & Target output & Element of \(Y_{\mathrm{target}}\) & Optional observed variable & Used in scalar-loss instantiations.\\
+\(\mathcal{C}\) & Context / constraint space & Measurable space & Optional primitive & Stores deployment context, constraints, or operational metadata.\\
+\(\xi\) & Context variable & \(\xi\in C\) & Optional primitive sample & Avoid conflict with ground cost notation by using xi or cxt if needed.\\
+\(\rho\) & Risk functional & Maps terminal evaluation/loss distribution to \(\mathbb{R}_+\) & Primitive & Examples: expectation, worst-case risk, CVaR, quantile risk.\\
+\end{longtable}
+\scriptsize
+\tabletitle{Table 6. Interventions and node-wise operational risk}
+\begin{longtable}{@{}P{0.13\linewidth} P{0.19\linewidth} P{0.21\linewidth} P{0.16\linewidth} P{0.23\linewidth}@{}}
+\toprule
+\textbf{Symbol} & \textbf{Meaning} & \textbf{Type / domain} & \textbf{Status} & \textbf{Notes}\\
+\midrule
+\endfirsthead
+\toprule
+\multicolumn{5}{@{}l}{\textit{Table 6 continued.}}\\
+\midrule
+\textbf{Symbol} & \textbf{Meaning} & \textbf{Type / domain} & \textbf{Status} & \textbf{Notes}\\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\(\operatorname{do}(z_v=z)\) & Node intervention & Intervention at node v & Modeling operation & Fixes internal node state to z and executes downstream graph.\\
+\(Y\) & Random terminal output & Random variable in Y & Induced & Output after normal execution or intervention.\\
+\(Y^{\operatorname{do}(v=z)}\) & Interventional terminal output & Random variable in Y & Induced & Use when the distinction from ordinary output matters.\\
+\(r_v\) & Node-wise operational risk & \(r_v:Z_v\to\mathbb{R}_+\) & Induced & Risk assigned to internal state z by downstream operational behavior.\\
+\(r_v(z)\) & Risk of state z at node v & Nonnegative real number & Induced & General form: \(\rho(\mathcal{E}_{\mathrm{op}}(Y)\mid\operatorname{do}(z_v=z))\).\\
+\(\widehat{r}_v\) & Estimated node-wise risk & Function \(Z_v\to\mathbb{R}_+\) & Estimated / learned & Used when risk is learned or estimated from rollouts/data.\\
+\(R_v\) & Random node-wise risk & Random variable \(r_v(z_v)\) & Induced & Useful for distributional or statistical statements.\\
+\(\varepsilon_r\) & Risk-estimation error tolerance & Nonnegative scalar & Analysis parameter & Use for stability or empirical-error statements.\\
+\(\rho_{\mathrm{exp}}\) & Expected-risk functional & \(\rho_{\mathrm{exp}}(U)=\mathbb{E}[U]\) & Optional example & One possible rho.\\
+\(\rho_{\mathrm{wc}}\) & Worst-case risk functional & Supremum-type risk & Optional example & One possible rho.\\
+\(\rho_{\mathrm{CVaR}}\) & Conditional value-at-risk & Tail-risk functional & Optional example & One possible rho.\\
+\end{longtable}
+\scriptsize
+\tabletitle{Table 7. Operational regions, semantic compatibility, and descriptors}
+\begin{longtable}{@{}P{0.13\linewidth} P{0.19\linewidth} P{0.21\linewidth} P{0.16\linewidth} P{0.23\linewidth}@{}}
+\toprule
+\textbf{Symbol} & \textbf{Meaning} & \textbf{Type / domain} & \textbf{Status} & \textbf{Notes}\\
+\midrule
+\endfirsthead
+\toprule
+\multicolumn{5}{@{}l}{\textit{Table 7 continued.}}\\
+\midrule
+\textbf{Symbol} & \textbf{Meaning} & \textbf{Type / domain} & \textbf{Status} & \textbf{Notes}\\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\(A_v(\tau)\) & Low-risk / acceptable region & Subset of \(Z_v\) & Induced / selectable threshold & \(A_v(\tau)=\{z\in Z_v:r_v(z)\leq\tau\}\).\\
+\(B_v(\kappa)\) & High-risk / failure region & Subset of \(Z_v\) & Induced / selectable threshold & \(B_v(\kappa)=\{z\in Z_v:r_v(z)\geq\kappa\}\).\\
+\(\tau\) & Acceptability threshold & Nonnegative scalar & Selectable parameter & Defines low-risk region.\\
+\(\kappa\) & Failure threshold & Nonnegative scalar & Selectable parameter & Defines high-risk region.\\
+\(U_v\) & Intermediate / uncertain region & Subset of \(Z_v\) & Induced optional notation & \(U_v=Z_v\setminus(A_v(\tau)\cup B_v(\kappa))\) when useful.\\
+\(\sim_{\mathrm{sem},v}\) & Semantic compatibility relation & Relation on \(Z_v\times Z_v\) & Primitive or induced & Write \(z\sim_{\mathrm{sem},v}z'\) when states are semantically compatible.\\
+\(s_v\) & Semantic descriptor map & \(s_v:Z_v\to S_v\) & Primitive / learned / selectable & Maps node states to semantic descriptors.\\
+\(S_v\) & Semantic descriptor space & Measurable or metric space & Primitive & Descriptor space for node v.\\
+\(d_{\mathrm{sem}}\) & Semantic descriptor distance & \(d_{\mathrm{sem}}:S_v\times S_v\to\mathbb{R}_+\) & Primitive & Used to define descriptor-based compatibility.\\
+\(\varepsilon_{\mathrm{sem}}\) & Semantic compatibility tolerance & Nonnegative scalar & Selectable parameter & Compatibility if \(d_{\mathrm{sem}}(s_v(z),s_v(z'))\leq\varepsilon_{\mathrm{sem}}\).\\
+\(a\) & Semantic anchor & Element of anchor set \(A_v^{\mathrm{anc}}\) & Optional primitive & Used in anchor-based compatibility.\\
+\(A_v^{\mathrm{anc}}\) & Semantic anchor set at node v & Finite or measurable set & Optional primitive & Example: lamp identity, road region, audit-relevant class.\\
+\(\chi_{\mathrm{incompat},v}\) & Incompatibility indicator & \(Z_v\times Z_v\to\{0,1\}\) & Induced & Equals 1 when a pair violates semantic or operational compatibility.\\
+\end{longtable}
+\scriptsize
+\tabletitle{Table 8. Operational discrepancy and ground costs}
+\begin{longtable}{@{}P{0.13\linewidth} P{0.19\linewidth} P{0.21\linewidth} P{0.16\linewidth} P{0.23\linewidth}@{}}
+\toprule
+\textbf{Symbol} & \textbf{Meaning} & \textbf{Type / domain} & \textbf{Status} & \textbf{Notes}\\
+\midrule
+\endfirsthead
+\toprule
+\multicolumn{5}{@{}l}{\textit{Table 8 continued.}}\\
+\midrule
+\textbf{Symbol} & \textbf{Meaning} & \textbf{Type / domain} & \textbf{Status} & \textbf{Notes}\\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\(\Delta_v\) & Operational discrepancy & \(\Delta_v:Z_v\times Z_v\to\mathbb{R}_+\) & Induced / selectable & Measures downstream difference between two internal states.\\
+\(d_Y\) & Terminal-output distance & \(d_Y:Y\times Y\to\mathbb{R}_+\) & Primitive when needed & Used when terminal output space is metric.\\
+\(c_v\) & Node-wise ground cost & \(c_v:Z_v\times Z_v\to\mathbb{R}_+\) & Primitive main object & General cost defining node-wise operational geometry.\\
+\(c_{v,\mathrm{op}}\) & Node-wise operational ground cost & \(Z_v\times Z_v\to\mathbb{R}_+\) & Preferred main notation & Use this instead of plain \(c_v\) when clarity is needed.\\
+\(c_{v,\mathrm{geo}}\) & Geometric component of cost & \(Z_v\times Z_v\to\mathbb{R}_+\) & Optional component & Usually based on d\_\{\(M_v\)\} or \(d_Z\).\\
+\(c_{v,\mathrm{sem}}\) & Semantic component of cost & \(Z_v\times Z_v\to\mathbb{R}_+\) & Optional component & Usually based on \(d_{\mathrm{sem}}(s_v(z),s_v(z'))\).\\
+\(c_{v,\mathrm{risk}}\) & Risk component of cost & \(Z_v\times Z_v\to\mathbb{R}_+\) & Optional component & Usually based on \(|r_v(z)-r_v(z')|\).\\
+\(c_{v,\mathrm{out}}\) & Terminal-output component of cost & \(Z_v\times Z_v\to\mathbb{R}_+\) & Optional component & Usually based on \(d_Y(G_v(z),G_v(z'))\).\\
+\(\alpha\) & Weight on geometric discrepancy & Nonnegative scalar & Selectable parameter & Used only in weighted instantiations.\\
+\(\beta\) & Weight on semantic discrepancy & Nonnegative scalar & Selectable parameter & Used only in weighted instantiations.\\
+\(\gamma\) & Weight on risk discrepancy & Nonnegative scalar & Selectable parameter & Used only in weighted instantiations.\\
+\(\eta\) & Weight on terminal-output discrepancy & Nonnegative scalar & Selectable parameter & Used only in weighted instantiations.\\
+\(\lambda\) & Weight on incompatibility penalty & Nonnegative scalar or infinity & Selectable parameter & Finite lambda gives soft penalty; infinity gives hard exclusion.\\
+\(c_{\mathrm{base}}\) & Baseline metric cost & Usually \(d_Z^p\) or \(d_{M_v}^p\) & Baseline object & Used to compare with ordinary Wasserstein geometry.\\
+\end{longtable}
+\scriptsize
+\tabletitle{Table 9. Couplings, admissibility, and transport objects}
+\begin{longtable}{@{}P{0.13\linewidth} P{0.19\linewidth} P{0.21\linewidth} P{0.16\linewidth} P{0.23\linewidth}@{}}
+\toprule
+\textbf{Symbol} & \textbf{Meaning} & \textbf{Type / domain} & \textbf{Status} & \textbf{Notes}\\
+\midrule
+\endfirsthead
+\toprule
+\multicolumn{5}{@{}l}{\textit{Table 9 continued.}}\\
+\midrule
+\textbf{Symbol} & \textbf{Meaning} & \textbf{Type / domain} & \textbf{Status} & \textbf{Notes}\\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\(\pi\) & Coupling / transport plan & Probability measure on \(Z\times Z\) or \(Z_v\times Z_v\) & Optimization variable & Moves mass between two probability laws.\\
+\(\Pi(\mu,\nu)\) & Coupling set & Set of \(\pi\) with marginals \(\mu\) and \(\nu\) & Induced & Standard Kantorovich coupling class.\\
+\(\Pi_v(\mu,\nu)\) & Node-wise coupling set & Couplings on \(Z_v\times Z_v\) & Induced & Use when node index matters.\\
+\(\Pi_{v,\mathrm{adm}}(\mu,\nu)\) & Admissible node-wise coupling class & Subset of \(\Pi_v(\mu,\nu)\) & Primitive / constrained object & Encodes semantic compatibility, operational substitutability, safety, or support restrictions.\\
+\(K_v\) & Pairwise admissibility relation & Subset of \(Z_v\times Z_v\) & Primitive / induced & A support constraint for admissible couplings.\\
+\(\operatorname{supp}(\pi)\) & Support of coupling pi & Subset of \(Z_v\times Z_v\) & Induced & Often require \(\operatorname{supp}(\pi)\subset K_v\).\\
+\(\operatorname{OT}_c(\mu,\nu)\) & Kantorovich OT value with cost c & Nonnegative scalar & Baseline derived object & Abstract optimal transport value.\\
+\(W_p(\mu,\nu)\) & p-Wasserstein distance & Nonnegative scalar & Baseline derived object & Used when \(c=d_Z^p\).\\
+\(W_{v,\mathrm{op}}(\mu,\nu)\) & Node-wise operational transport discrepancy & Nonnegative scalar & Main derived object & Defined using \(c_{v,\mathrm{op}}\) and \(\Pi_{v,\mathrm{adm}}\).\\
+\(W_{v,\mathrm{op}}(\mu_v^d,\mu_v^{d'})\) & Operational discrepancy between domains at node v & Nonnegative scalar & Main derived object & Compares domain-induced node laws.\\
+\(\widetilde{W}_{v,\mathrm{op}}\) & Shared-space operational transport & Nonnegative scalar & Derived object & Used when comparing aligned laws on \(\widetilde{M}_v\).\\
+\(D_v^{\mathrm{op}}\) & Node-wise operational divergence & Nonnegative scalar & Optional alias & Use only if avoiding the word distance before metric properties are proved.\\
+\(\equiv_{v,\mathrm{op}}\) & Operational equivalence relation & Relation on laws or states & Derived / theorem target & Zero-distance or zero-discrepancy equivalence.\\
+\([\mu]_{v,\mathrm{op}}\) & Operational equivalence class of a law & Quotient object & Derived / optional & Use if quotient geometry is explicitly developed.\\
+\end{longtable}
+\scriptsize
+\tabletitle{Table 10. Unbalanced transport and mass mismatch}
+\begin{longtable}{@{}P{0.13\linewidth} P{0.19\linewidth} P{0.21\linewidth} P{0.16\linewidth} P{0.23\linewidth}@{}}
+\toprule
+\textbf{Symbol} & \textbf{Meaning} & \textbf{Type / domain} & \textbf{Status} & \textbf{Notes}\\
+\midrule
+\endfirsthead
+\toprule
+\multicolumn{5}{@{}l}{\textit{Table 10 continued.}}\\
+\midrule
+\textbf{Symbol} & \textbf{Meaning} & \textbf{Type / domain} & \textbf{Status} & \textbf{Notes}\\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\(\pi \geq 0\) & Nonnegative transport measure & Finite measure on \(Z_v\times Z_v\) & Optimization variable & Used in unbalanced transport.\\
+\(\pi_1,\pi_2\) & Marginals of pi & Finite measures on \(Z_v\) & Induced & Not necessarily equal to mu and nu in unbalanced OT.\\
+\(D(\cdot\,\Vert\,\cdot)\) & Divergence between measures & Nonnegative functional & Primitive & Example: KL divergence, total variation penalty, chi-square divergence.\\
+\(\rho_1,\rho_2\) & Marginal mismatch weights & Nonnegative scalars & Selectable parameters & Penalize unmatched or reweighted mass.\\
+\(UW_{v,\mathrm{op}}(\mu,\nu)\) & Unbalanced node-wise operational transport & Nonnegative scalar & Derived object & Used when full mass matching is inappropriate.\\
+\(m_v\) & Matched mass at node v & Nonnegative scalar & Derived optional & Useful to interpret how much mass is operationally alignable.\\
+\(u_v\) & Unmatched mass at node v & Nonnegative scalar & Derived optional & Useful when diagnosing non-substitutable regions.\\
+\end{longtable}
+\scriptsize
+\tabletitle{Table 11. System-level aggregation and global discrepancy}
+\begin{longtable}{@{}P{0.13\linewidth} P{0.19\linewidth} P{0.21\linewidth} P{0.16\linewidth} P{0.23\linewidth}@{}}
+\toprule
+\textbf{Symbol} & \textbf{Meaning} & \textbf{Type / domain} & \textbf{Status} & \textbf{Notes}\\
+\midrule
+\endfirsthead
+\toprule
+\multicolumn{5}{@{}l}{\textit{Table 11 continued.}}\\
+\midrule
+\textbf{Symbol} & \textbf{Meaning} & \textbf{Type / domain} & \textbf{Status} & \textbf{Notes}\\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\(\mathcal{A}\) & Aggregation functional & \(\mathcal{A}:\mathbb{R}_+^{|V|}\to\mathbb{R}_+\) & Primitive / selectable & Aggregates node-wise discrepancies into system-level discrepancy.\\
+\(\omega_v\) & Node aggregation weight & Nonnegative scalar & Selectable parameter & Used in weighted-sum aggregation.\\
+\(D_{\mathrm{op}}(d,d')\) & System-level operational discrepancy between domains & Nonnegative scalar & Main derived object & Aggregates \(\{W_{v,\mathrm{op}}(\mu_v^d,\mu_v^{d'})\}_{v\in V}\).\\
+\(D_{\mathrm{op},p}(d,d')\) & p-power aggregated discrepancy & Nonnegative scalar & Optional derived object & Use if aggregation keeps p-powers explicit.\\
+\(V_{\mathrm{sel}}\) & Selected node set & Subset of V & Selectable modeling object & Use if transport is computed only on selected nodes.\\
+\(\mathcal{A}_{\max}\) & Max aggregation & Max over selected node discrepancies & Optional aggregation & Useful for worst-node behavior.\\
+\(\mathcal{A}_{\mathrm{sum}}\) & Weighted-sum aggregation & Sum over \(v\) of \(\omega_v W_{v,\mathrm{op}}^p\) & Optional aggregation & Default simple instantiation.\\
+\(\mathcal{A}_{\mathrm{risk}}\) & Risk-weighted aggregation & Aggregation weighted by risk/sensitivity & Optional aggregation & Use only if justified later.\\
+\end{longtable}
+\scriptsize
+\tabletitle{Table 12. Safe target laws, learnable objects, and regularization}
+\begin{longtable}{@{}P{0.13\linewidth} P{0.19\linewidth} P{0.21\linewidth} P{0.16\linewidth} P{0.23\linewidth}@{}}
+\toprule
+\textbf{Symbol} & \textbf{Meaning} & \textbf{Type / domain} & \textbf{Status} & \textbf{Notes}\\
+\midrule
+\endfirsthead
+\toprule
+\multicolumn{5}{@{}l}{\textit{Table 12 continued.}}\\
+\midrule
+\textbf{Symbol} & \textbf{Meaning} & \textbf{Type / domain} & \textbf{Status} & \textbf{Notes}\\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\(Q_v\) & Safe target law at node v & Probability measure on \(Z_v\) or \(M_v\) & Selectable / learned & Intended target distribution supported on operationally acceptable states.\\
+\(\operatorname{supp}(Q_v)\) & Support of safe target law & Subset of \(Z_v\) & Induced & Often require \(\operatorname{supp}(Q_v)\subset A_v(\tau)\).\\
+\(\mathfrak{Q}\) & Collection of safe target laws & \(\{Q_v\}_{v\in V_{\mathrm{sel}}}\) & Selectable / learned & Avoid conflict with evaluation space Q by writing fraktur Q or the full collection explicitly.\\
+\(\Theta\) & Learnable object collection & Parameter space & Learned/selectable & May include projections, descriptors, risks, costs, target laws, and aggregation weights.\\
+\(\theta\) & Generic parameter & Element of \(\Theta\) & Learned/selectable & Use for optimization statements.\\
+\(\mathcal{R}(\Theta)\) & Regularizer / anti-collapse penalty & \(\mathbb{R}_+\)-valued functional & Primitive / selectable & Prevents trivial collapse and preserves downstream-relevant information.\\
+\(\mu_{v,\Theta}^d\) & Parameter-dependent node law & Probability measure on \(Z_v\) & Induced & Used when representations or projections depend on learned parameters.\\
+\(c_{v,\mathrm{op},\Theta}\) & Parameter-dependent operational cost & \(Z_v\times Z_v\to\mathbb{R}_+\) & Learned/induced & Used if cost components are learned.\\
+\(s_{v,\Theta}\) & Parameter-dependent descriptor map & \(Z_v\to S_v\) & Learned/induced & Used if semantic descriptors are learned.\\
+\(r_{v,\Theta}\) & Parameter-dependent risk estimate & \(Z_v\to\mathbb{R}_+\) & Learned/estimated & Used if risk model depends on learned parameters.\\
+\(J(\Theta)\) & Training / fitting objective & Scalar objective & Derived & Used only in optimization sections.\\
+\end{longtable}
+\scriptsize
+\tabletitle{Table 13. Streetlight-auditing instantiation notation}
+\begin{longtable}{@{}P{0.13\linewidth} P{0.19\linewidth} P{0.21\linewidth} P{0.16\linewidth} P{0.23\linewidth}@{}}
+\toprule
+\textbf{Symbol} & \textbf{Meaning} & \textbf{Type / domain} & \textbf{Status} & \textbf{Notes}\\
+\midrule
+\endfirsthead
+\toprule
+\multicolumn{5}{@{}l}{\textit{Table 13 continued.}}\\
+\midrule
+\textbf{Symbol} & \textbf{Meaning} & \textbf{Type / domain} & \textbf{Status} & \textbf{Notes}\\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\(\mathcal{X}_{\mathrm{vid}}\) & Video input space & Input space & Primitive in application & Raw nighttime video or clips.\\
+\(\mathcal{X}_{\mathrm{meta}}\) & Metadata space & Input/context space & Optional primitive & Camera, GPS, IMU, exposure, timestamp, route, or sensor metadata.\\
+\(v_{\mathrm{det}}\) & Detector node & Element of V & Application node & Produces streetlight detections or detection features.\\
+\(v_{\mathrm{track}}\) & Tracker node & Element of V & Application node & Links detections across frames.\\
+\(v_{\mathrm{repr}}\) & Representation node & Element of V & Application node & Produces internal representation used for measurement.\\
+\(v_{\mathrm{meas}}\) & Measurement node & Element of V & Application node & Estimates illumination-relevant quantities.\\
+\(v_{\mathrm{report}}\) & Audit-report node & Element of V or terminal node & Application node & Produces final operational audit report.\\
+\(\mathcal{Y}_{\mathrm{audit}}\) & Audit-report output space & Terminal output space & Application object & Contains useful illumination, coverage, adequacy, glare/confounder penalties, uncertainty flags.\\
+\(\mathcal{E}_{\mathrm{audit}}\) & Audit operational evaluation & \(Y_{\mathrm{audit}}\to Q_{\mathrm{audit}}\) & Application evaluator & Judges final report quality.\\
+\(L_{\mathrm{audit}}\) & Scalar audit loss & \(Y_{\mathrm{audit}}\to\mathbb{R}_+\), or supervised version & Optional scalarization & Used when scalar audit error is available.\\
+\(r_{v,\mathrm{audit}}\) & Streetlight node-wise operational risk & \(Z_v\to\mathbb{R}_+\) & Application-induced risk & Downstream audit harm caused by internal state z.\\
+\(A_{v,\mathrm{audit}}(\tau)\) & Audit-acceptable region & Subset of \(Z_v\) & Application-induced region & Internal states producing acceptable audit behavior.\\
+\(B_{v,\mathrm{audit}}(\kappa)\) & Audit-failure region & Subset of \(Z_v\) & Application-induced region & Internal states producing high-risk audit behavior.\\
+\(s_{v,\mathrm{audit}}\) & Audit semantic descriptor & \(Z_v\to S_v\) & Application descriptor & May encode physical lamp identity, region, lamp class, road context, or illumination-relevant structure.\\
+\(c_{v,\mathrm{audit}}\) & Streetlight operational cost & \(Z_v\times Z_v\to\mathbb{R}_+\) & Application ground cost & Combines geometric, semantic, risk, and terminal audit discrepancy.\\
+\(\Pi_{v,\mathrm{audit\text{-}adm}}\) & Streetlight admissible coupling class & Subset of \(\Pi_v\) & Application admissibility object & Allows only audit-compatible substitutions.\\
+\(Q_{v,\mathrm{audit}}\) & Streetlight safe target law & Probability measure on \(Z_v\) & Application target & Represents acceptable internal states for audit behavior.\\
+\(\delta_{\mathrm{glare}}\) & Glare shift descriptor & Shift/context variable & Application variable & One deployment shift axis.\\
+\(\delta_{\mathrm{blur}}\) & Blur shift descriptor & Shift/context variable & Application variable & One deployment shift axis.\\
+\(\delta_{\mathrm{view}}\) & Viewpoint shift descriptor & Shift/context variable & Application variable & One deployment shift axis.\\
+\(\delta_{\mathrm{scale}}\) & Scale shift descriptor & Shift/context variable & Application variable & One deployment shift axis.\\
+\(\delta_{\mathrm{occ}}\) & Occlusion shift descriptor & Shift/context variable & Application variable & One deployment shift axis.\\
+\(\delta_{\mathrm{comp}}\) & Compression shift descriptor & Shift/context variable & Application variable & One deployment shift axis.\\
+\(\delta_{\mathrm{sensor}}\) & Sensor-quality shift descriptor & Shift/context variable & Application variable & One deployment shift axis.\\
+\(\delta_{\mathrm{road}}\) & Road-geometry shift descriptor & Shift/context variable & Application variable & One deployment shift axis.\\
+\end{longtable}
+\scriptsize
+\tabletitle{Table 14. Recommended notation policy}
+\begin{longtable}{@{}P{0.25\linewidth} P{0.68\linewidth}@{}}
+\toprule
+\textbf{Rule} & \textbf{Resolution}\\
+\midrule
+\endfirsthead
+\toprule
+\multicolumn{2}{@{}l}{\textit{Table 14 continued.}}\\
+\midrule
+\textbf{Rule} & \textbf{Resolution}\\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Primary framework name & Operational Transport Geometry.\\
+Primary title direction & Operational Transport Geometry for Representation Learning under Deployment Shift.\\
+Use \(c_{v,\mathrm{op}}\), not only \(c_v\) & Use \(c_{v,\mathrm{op}}\) as the main paper notation for operational ground cost. Plain \(c_v\) may be used only after the operational meaning is clear.\\
+Use \(W_{v,\mathrm{op}}\) cautiously & Before metric properties are proved, call \(W_{v,\mathrm{op}}\) a transport discrepancy or transport value. Call it a distance only under stated assumptions.\\
+Keep \(\mathcal{E}_{\mathrm{op}}\) and \(L_{\mathrm{op}}\) separate & \(\mathcal{E}_{\mathrm{op}}\) is the general structured terminal evaluation. \(L_{\mathrm{op}}\) is a scalar-loss instantiation.\\
+Keep terminal evaluation and internal risk separate & Terminal evaluation is applied to final outputs. Node-wise risk is induced on internal states.\\
+Separate primitive and learned objects & \(P_d\), \(G\), \(Z_v\), \(H\), \(\mathcal{E}_{\mathrm{op}}\), and \(\rho\) are modeling primitives. \(r_v\), \(\mu_v^d\), \(c_{v,\mathrm{op}}\), and \(W_{v,\mathrm{op}}\) are induced once primitives are fixed, unless estimated variants are explicitly introduced.\\
+Use hats for empirical estimates & Use \(\widehat{\mu}_v^d\) and \(\widehat{r}_v\) for estimated objects.\\
+Use tildes for shared-space aligned objects & Use \(\widetilde{M}_v\) and \(\widetilde{\mu}_v^d\) when domain-specific representations are projected into a shared space.\\
+Use subscripts for application instantiation & Use audit subscripts only in the streetlight section, for example \(r_{v,\mathrm{audit}}\) and \(c_{v,\mathrm{audit}}\).\\
+Avoid symbol conflict for Q & Q is already the operational evaluation space. If safe target laws are collected globally, use calligraphic Q or write \(\{Q_v\}_{v\in V_{\mathrm{sel}}}\).\\
+Avoid symbol conflict for c & Use \(c_{v,\mathrm{op}}\) for cost. If context variables are needed, write cxt or use C for the context space and xi for a context sample.\\
+\end{longtable}
+
+\end{landscape}
+\normalsize
+\section*{R7. Finalize the system model contract.}
+\addcontentsline{toc}{section}{R7. Finalize the system model contract.}
+
+\subsection*{Question}
+
+State exactly what a deployed system is: a finite directed acyclic graph with node spaces and measurable node maps. Decide which regularity assumptions belong in the main text and which belong in an appendix.
+
+\subsection*{Answer}
+
+The deployed system is represented by a finite directed acyclic graph \(G=(V,E)\). Each node \(v\) in \(V\) is assigned a measurable state space \(Z_v\), and each directed edge \((u,v)\) in \(E\) indicates that the state at \(u\) is an input to the computation at \(v\). For each non-input node \(v\), let \(Pa(v) = \{u \text{ in } V : (u,v) \text{ in } E\}\) denote its parent set. The node update is a measurable map \(F_v\) from the product of the parent state spaces to \(Z_v\), so that \(z_v = F_v((z_u)_{u \text{ in } Pa(v)})\). Given an input \(x\) in \(X\), the graph induces node states \(\{z_v\}_{v \text{ in } V}\) by evaluating these maps in any topological order of the DAG. If \(T\) is the set of terminal nodes, the final output is obtained from a measurable terminal map \(H\) from the product of terminal state spaces to an output space \(Y\).
+
+\section*{R8. Finalize the node-space contract.}
+\addcontentsline{toc}{section}{R8. Finalize the node-space contract.}
+
+\subsection*{Question}
+
+Decide when node spaces are general measurable spaces, Polish spaces, metric spaces, or smooth representation manifolds. Avoid switching between these settings without stating the assumption change.
+
+\subsection*{Answer}
+
+Each node \(v\) in the deployed graph is assigned a measurable state space \(Z_v\). When probability-measure and transport objects are introduced, \(Z_v\) is assumed to be a Polish space, or a Borel subset of a Polish space. When \(v\) is a representation-producing node, \(Z_v\) may be specialized to a representation space \(M_v\), such as a finite-dimensional smooth manifold, an embedded subset of Euclidean space, or a learned latent space equipped with a measurable and, when needed, metric structure. The paper should state explicitly which level of structure is being used in each definition: measurable spaces for graph propagation and node laws, Polish or metric spaces for transport, and manifold or latent-space structure only for representation-geometric interpretations.
+
+\section*{R9. Finalize the deployment-domain contract.}
+\addcontentsline{toc}{section}{R9. Finalize the deployment-domain contract.}
+
+\subsection*{Question}
+
+Define what a deployment domain is, how it induces input laws, and how each input law pushes forward to node-wise representation laws. This is needed before any transport object is meaningful.
+
+\subsection*{Answer}
+
+A deployment domain is represented by an index \(d\) in a domain set \(D\), together with an input law \(P_d\) on the input space \(X\). For a deployed graph with upstream map \(\Phi_v\) from inputs to node \(v\), domain \(d\) induces a node-wise law \(\mu_v^d = (\Phi_v)_\# P_d\) on \(Z_v\). Thus, a deployment shift is represented at the input level by a change from \(P_d\) to \(P_{d'}\), and at an internal node \(v\) by the corresponding change from \(\mu_v^d\) to \(\mu_v^{d'}\). These node-wise laws are the probability measures compared by the operational transport construction. The mathematical object used by the framework is the induced family of node laws \(\{\mu_v^d\}_{v \text{ in } V, d \text{ in } D}\).
+
+\section*{R10. Resolve the shared-space issue.}
+\addcontentsline{toc}{section}{R10. Resolve the shared-space issue.}
+
+\subsection*{Question}
+
+If different domains induce representations in different spaces, define when projection or alignment maps into a shared node representation space are allowed. This must be resolved before defining cross-domain node-wise transport.
+
+\subsection*{Answer}
+
+Operational transport between two domain-induced node laws is defined directly when both laws live on the same node state space \(Z_v\). If domain-specific representations are realized in different spaces \(Z_v^d\) and \(Z_v^{d'}\), the paper must specify a shared comparison space \(\widetilde{Z}_v\) and measurable alignment maps \(\phi_v^d: Z_v^d \to \widetilde{Z}_v\) and \(\phi_v^{d'}: Z_v^{d'} \to \widetilde{Z}_v\). The compared measures are then the aligned pushforwards \(\widetilde{\mu}_v^d = (\phi_v^d)_\# \mu_v^d\) and \(\widetilde{\mu}_v^{d'} = (\phi_v^{d'})_\# \mu_v^{d'}\). The operational cost, admissible coupling class, and transport discrepancy must be defined on the shared space, not separately on incompatible domain-specific spaces. Thus, cross-domain operational transport requires either a common node space from the start or an explicitly stated shared-space alignment layer.
+
+\section*{R11. Decide the node selection policy.}
+\addcontentsline{toc}{section}{R11. Decide the node selection policy.}
+
+\subsection*{Question}
+
+Clarify whether operational transport is defined for every node, only representation-producing nodes, only selected internal nodes, or only nodes chosen by the user. This affects both notation and paper scope.
+
+\subsection*{Answer}
+
+Operational transport is defined at any node \(v\) for which the required objects are available: a node state space \(Z_v\), domain-induced node laws \(\mu_v^d\), a node-wise operational risk \(r_v\), an operational ground cost, and an admissible coupling class. The framework may be stated over all nodes in \(V\), but practical and theoretical analysis may restrict attention to a selected subset \(V_{sel} \subset V\). This selected set should include the internal representation-producing, measurement-relevant, or decision-relevant nodes where deployment shifts can change downstream operational behavior. Terminal nodes may be included when comparing final-output distributions is useful, but the central contribution concerns internal node laws whose geometry is induced by terminal operational evaluation. Thus, the paper should define the general construction node-wise, and then aggregate only over a declared selected node set.
+
+\section*{R12. Define the terminal evaluation layer.}
+\addcontentsline{toc}{section}{R12. Define the terminal evaluation layer.}
+
+\subsection*{Question}
+
+Decide whether the primary object is a general operational evaluation functional, a scalar operational loss, or both. The paper should introduce the general object first and then give scalar loss as a special case.
+
+\subsection*{Answer}
+
+The terminal output of the deployed graph is evaluated by an operational evaluation functional \(E_{op}: Y \to Q\), where \(Y\) is the final output space and \(Q\) is an evaluation space that may contain structured deployment-relevant judgments. When a scalar quantity is needed, the paper may use a scalar operational loss \(L_{op}: Y \to \mathbb{R}_+\), or \(L_{op}: Y \times Y_{target} \times C \to \mathbb{R}_+\) when targets or deployment context are available. The general object is \(E_{op}\), while \(L_{op}\) is a scalar instantiation used for risks, examples, and optimization statements. Terminal evaluation is applied to the final system output, not directly to internal representations; internal node risks are induced only after fixing an internal node state and executing the downstream part of the graph.
+
+\section*{R13. Define the intervention semantics.}
+\addcontentsline{toc}{section}{R13. Define the intervention semantics.}
+
+\subsection*{Question}
+
+Clarify what it means to intervene on an internal node state and execute the downstream subgraph. This must be precise enough to define node-wise risk, but it does not require proving intervention-identifiability yet.
+
+\subsection*{Answer}
+
+For an internal node \(v\) and a candidate state \(z\) in \(Z_v\), the intervention \(do(z_v = z)\) means that the usual upstream computation producing \(z_v\) is replaced by the fixed value \(z\), while the downstream subgraph from \(v\) to the terminal output is evaluated using the ordinary node transition maps. Formally, the incoming dependence of \(v\) on its parents is cut, \(z_v\) is set equal to \(z\), and every descendant node \(w\) of \(v\) is recomputed according to its transition map \(F_w\) using the intervened state and the remaining required inputs. This produces an interventional terminal output, denoted \(Y^{do(z_v=z)}\), and terminal operational evaluation is then applied to this output.
+
+The node-wise operational risk at \(v\) is defined by applying a risk functional \(\rho\) to the terminal operational evaluation induced by this intervention. In the structured-evaluation case, \(r_v(z) = \rho(E_{op}(Y^{do(z_v=z)}))\); in the scalar-loss case, \(r_v(z) = \rho(L_{op}(Y^{do(z_v=z)}))\). If the downstream system is deterministic after \(z\) is fixed, this risk is simply the evaluated downstream loss or operational score. If the downstream system contains randomness, context variation, uncertain targets, sensor noise, or stochastic modules, the risk is computed over the resulting distribution of terminal outcomes, for example by expectation, worst-case risk, quantile risk, or CVaR.
+
+In practice, \(r_v(z)\) may be computed exactly when the downstream maps and evaluation functional are known and tractable. Otherwise, it is estimated by downstream rollout: fix or sample candidate states \(z\) at node \(v\), execute the downstream subgraph under relevant contexts or deployment conditions, record the resulting terminal outputs, apply \(E_{op}\) or \(L_{op}\), and estimate \(\rho\) from these samples. Thus, intervention is used as a mathematical downstream-execution operator for assigning operational consequence to internal states; it does not require that every internal state can be physically forced in the deployed system unless a later experimental or causal-identification section explicitly assumes this.
+
+\section*{R14. Define the risk functional menu.}
+\addcontentsline{toc}{section}{R14. Define the risk functional menu.}
+
+\subsection*{Question}
+
+Specify the allowed risk functionals: expectation, worst-case risk, CVaR, or other deployment-specific scalarizations. The paper should state what properties the risk functional must satisfy for the rest of the construction to make sense.
+
+\subsection*{Answer}
+
+The node-wise operational risk is obtained by applying a risk functional \(\rho\) to the terminal evaluation induced by an intervention. The paper should allow \(\rho\) to be chosen according to the deployment setting rather than fixing one universal scalarization. Standard choices include expected risk, worst-case risk, quantile risk, and conditional value-at-risk. Expected risk is appropriate when average downstream behavior is the relevant criterion; worst-case risk is appropriate when any severe failure is unacceptable; quantile risk and CVaR are appropriate when tail failures matter but pure worst-case analysis is too conservative.
+
+For the core construction, \(\rho\) should be treated as a user-specified or problem-specified functional that maps a distribution of terminal evaluations or losses to a nonnegative scalar. The paper should state the minimal properties required of \(\rho\) in each result, such as measurability, monotonicity, finite value, or stability under perturbations. Thus, the framework does not depend on a single notion of operational risk; it depends on a declared risk functional that converts downstream terminal behavior into a node-wise scalar consequence.
+
+\section*{R15. Resolve the status of node-wise risk.}
+\addcontentsline{toc}{section}{R15. Resolve the status of node-wise risk.}
+
+\subsection*{Question}
+
+Decide whether node-wise risk is assumed known, estimated, learned, approximated, or supplied by an oracle. This is a paper-architecture issue separate from implementation.
+
+\subsection*{Answer}
+
+The paper should distinguish between the formal risk function \(r_v\) and its practical estimate. In the mathematical construction, \(r_v\) is treated as an induced object: once the deployed graph, intervention semantics, terminal evaluation, and risk functional are fixed, each internal state \(z\) in \(Z_v\) has a downstream operational consequence \(r_v(z)\). This formal object defines the operational geometry.
+
+In applications, \(r_v\) may not be available exactly. It may be computed analytically from known downstream maps, approximated by simulation, estimated by downstream rollout, learned from data, or supplied by a domain-specific evaluator. When an estimate is used, it should be denoted separately, for example as \(\widehat{r}_v\), and the paper should make clear which definitions use the ideal risk \(r_v\) and which implementation or evidence sections use the estimated risk \(\widehat{r}_v\). This separation prevents the framework from confusing the definition of operational geometry with the statistical problem of estimating the risk function.
+
+\section*{R16. Define low-risk and high-risk regions.}
+\addcontentsline{toc}{section}{R16. Define low-risk and high-risk regions.}
+
+\subsection*{Question}
+
+Finalize the definitions of admissible low-risk sets and high-risk/failure regions. Decide whether they are threshold level sets, quantile regions, constraint-defined sets, or externally specified operational regions.
+
+\subsection*{Answer}
+
+Given a node-wise operational risk function \(r_v: Z_v \to \mathbb{R}_+\), the paper defines operational regions inside the node state space. For an acceptability threshold \(\tau \geq 0\), the low-risk or acceptable region is \(A_v(\tau) = \{z \text{ in } Z_v : r_v(z) \leq \tau\}\). For a failure threshold \(\kappa \geq \tau\), the high-risk or failure region is \(B_v(\kappa) = \{z \text{ in } Z_v : r_v(z) \geq \kappa\}\). States outside these regions may be treated as intermediate, uncertain, or context-dependent.
+
+These regions are not labels attached directly to the input domain; they are subsets of an internal node space induced by downstream operational behavior. A state belongs to \(A_v(\tau)\) when intervening at node \(v\) with that state preserves acceptable terminal behavior under the chosen risk functional. A state belongs to \(B_v(\kappa)\) when it produces unacceptable downstream consequence. The thresholds \(\tau\) and \(\kappa\) are modeling choices determined by deployment requirements, and the paper may replace simple threshold sets with quantile-based, constraint-based, or externally specified acceptability regions when the application requires it.
+
+\section*{R17. Define semantic compatibility.}
+\addcontentsline{toc}{section}{R17. Define semantic compatibility.}
+
+\subsection*{Question}
+
+Specify the semantic compatibility relation between node states. Decide whether it is primitive, descriptor-based, metric-based, anchor-based, label-based, or derived from downstream behavior.
+
+\subsection*{Answer}
+
+Semantic compatibility is a node-wise relation that specifies when two internal states are allowed to be treated as representing the same operationally relevant object, condition, or role. For a node \(v\), write \(z \sim_{sem,v} z'\) when states \(z\) and \(z'\) in \(Z_v\) are semantically compatible. This relation may be supplied as a primitive relation, derived from metadata, defined through semantic descriptors, or induced by application-specific anchors such as object identity, region, class, physical source, or operational role.
+
+Semantic compatibility is distinct from low operational risk. Two states may both be low-risk but semantically incompatible if they correspond to different physical objects or different operational roles. Conversely, two states may be semantically compatible but operationally different if substituting one for the other changes downstream terminal behavior. The purpose of semantic compatibility is to restrict or penalize transport between states that should not be matched merely because they have similar numerical features or similar risk values.
+
+\section*{R18. Define semantic descriptors.}
+\addcontentsline{toc}{section}{R18. Define semantic descriptors.}
+
+\subsection*{Question}
+
+If descriptor maps are used, define what they take as input, what they output, and what properties they must satisfy. This prevents the semantic term from becoming an undefined placeholder.
+
+\subsection*{Answer}
+
+A semantic descriptor at node \(v\) is a map \(s_v: Z_v \to S_v\) from the node state space to a descriptor space \(S_v\). The descriptor is used to express application-relevant semantic information about an internal state, such as object identity, object class, spatial region, physical source, operational role, scene context, or any other property needed to decide whether two states are meaningful candidates for matching. When \(S_v\) is equipped with a descriptor distance \(d_{sem}\), semantic compatibility may be defined by a tolerance rule, for example \(z \sim_{sem,v} z'\) when \(d_{sem}(s_v(z), s_v(z')) \leq \varepsilon_{sem}\).
+
+The descriptor map may be externally specified, derived from metadata, produced by an auxiliary model, or learned as part of the system. The paper should state which case is being used. Semantic descriptors should not be treated as arbitrary feature maps; they exist to define or support admissible matching between states. Their role is to prevent operational transport from matching states that are numerically close or risk-similar but semantically inappropriate to substitute.
+
+\section*{R19. Define the downstream map from a node.}
+\addcontentsline{toc}{section}{R19. Define the downstream map from a node.}
+
+\subsection*{Question}
+
+Introduce the downstream map from an internal node state to terminal output. This is required for operational discrepancy and makes the paper's ``terminal behavior induces internal geometry'' claim concrete.
+
+\subsection*{Answer}
+
+For each node \(v\), the downstream map \(G_v\) represents the computation from an intervened node state \(z\) in \(Z_v\) to the final terminal output. Formally, \(G_v\) is obtained by fixing \(z_v = z\), evaluating the descendant nodes of \(v\) using the ordinary transition maps, and then applying the terminal output map \(H\). When the downstream computation is deterministic after \(z\) is fixed, \(G_v\) is a measurable map from \(Z_v\) to \(Y\). When downstream randomness, context, or exogenous variables remain, \(G_v\) should be understood as a Markov kernel from \(Z_v\) to probability laws on \(Y\).
+
+The downstream map is the bridge between internal representation states and terminal operational behavior. It makes precise how a state inside the deployed system can be assigned downstream consequence. The paper may use \(G_v(z)\) in the deterministic case and \(Y^{do(z_v=z)}\) in the stochastic case, but it should keep the interpretation fixed: \(G_v\) or its stochastic analogue describes what terminal output would be produced by the downstream system if node \(v\) were set to \(z\).
+
+\section*{R20. Define operational discrepancy.}
+\addcontentsline{toc}{section}{R20. Define operational discrepancy.}
+
+\subsection*{Question}
+
+Resolve whether operational discrepancy is based on terminal output distance, risk difference, both, or a more general discrepancy functional. This should be defined before the ground cost.
+
+\subsection*{Answer}
+
+For a node \(v\), operational discrepancy measures how differently two internal states \(z\) and \(z'\) in \(Z_v\) behave when propagated through the downstream system. It is a pairwise comparison induced by terminal behavior, not merely by geometric distance in representation space. In the deterministic case, operational discrepancy may compare the downstream outputs \(G_v(z)\) and \(G_v(z')\), the node-wise risks \(r_v(z)\) and \(r_v(z')\), or both. A representative form is \(\Delta_v(z,z') = d_Y(G_v(z),G_v(z')) + |r_v(z) - r_v(z')|\), when \(Y\) has a terminal-output distance \(d_Y\).
+
+In the stochastic case, operational discrepancy should compare the induced terminal-output distributions or the induced distributions of terminal evaluations. This may be done through a distance between output laws, a distance between evaluation laws, a difference of scalar risks, or a combination of these. The role of \(\Delta_v\) is to express downstream behavioral difference between internal states; it is then used as one component in the operational ground cost. The paper should define \(\Delta_v\) generally first and present specific formulas only as instantiations.
+
+\section*{R21. Finalize the operational ground cost template.}
+\addcontentsline{toc}{section}{R21. Finalize the operational ground cost template.}
+
+\subsection*{Question}
+
+Define the general node-wise operational ground cost as the main object. Then present the weighted expression only as an instantiation, not as the central contribution. This is critical because the paper must not look like it merely adds a weighted loss.
+
+\subsection*{Answer}
+
+For each selected node \(v\), the operational ground cost \(c_{v,op}: Z_v \times Z_v \to \mathbb{R}_+\) defines the cost of matching or transporting mass between two internal states \(z\) and \(z'\). This cost should be introduced as a general node-wise object, not as a fixed weighted Euclidean formula. Its purpose is to combine the aspects of state comparison that are relevant for downstream deployment behavior: representation geometry, semantic compatibility, operational discrepancy, risk difference, terminal-output behavior, and possible incompatibility penalties.
+
+A useful instantiation is a weighted cost of the form \(c_{v,op}(z,z') = \alpha c_{v,geo}(z,z') + \beta c_{v,sem}(z,z') + \gamma c_{v,risk}(z,z') + \eta c_{v,out}(z,z') + \lambda \chi_{incompat,v}(z,z')\), where each component is defined separately and the weights are nonnegative. This formula should be presented only as an example template. The paper's main object is the operational ground cost itself, together with the assumptions under which it is measurable, lower semicontinuous, finite on relevant pairs, and suitable for defining a transport problem.
+
+\section*{R22. Separate primitive costs from learned costs.}
+\addcontentsline{toc}{section}{R22. Separate primitive costs from learned costs.}
+
+\subsection*{Question}
+
+Clarify which parts of the cost are fixed by the problem setting, which are learned, and which are hyperparameters. This prevents confusion between ``defining a geometry'' and ``training another metric.''
+
+\subsection*{Answer}
+
+The paper should distinguish between operational costs that are specified as part of the modeling framework and operational costs that are estimated or learned from data. In the formal construction, \(c_{v,op}\) is treated as a declared node-wise ground cost: once the state space, semantic compatibility rule, downstream discrepancy, risk function, and admissibility structure are fixed, the cost is part of the mathematical object used to define transport. This declared cost may be hand-specified, derived from domain knowledge, or defined from previously fixed components.
+
+In implementation or empirical sections, some components of \(c_{v,op}\) may be learned, estimated, or tuned, such as semantic descriptors, risk models, output discrepancies, alignment maps, or component weights. These learned variants should be denoted explicitly, for example as \(c_{v,op,\Theta}\), and should not be confused with the ideal cost used in the base definition. The paper should state which components are primitive, which are induced, and which are learned; otherwise the framework may appear circular, because the same data could be used both to define the geometry and to validate it.
+
+\section*{R23. Define admissible couplings.}
+\addcontentsline{toc}{section}{R23. Define admissible couplings.}
+
+\subsection*{Question}
+
+State what makes a coupling admissible: semantic compatibility, operational substitutability, safety constraints, support restrictions, or bounded discrepancy. This is one of the paper's core conceptual components.
+
+\subsection*{Answer}
+
+For two node-wise laws \(\mu\) and \(\nu\) on \(Z_v\), the admissible coupling class \(\Pi_{v,adm}(\mu,\nu)\) is a specified subset of the ordinary Kantorovich coupling set \(\Pi(\mu,\nu)\). A coupling \(\pi\) is admissible when it transports mass only through state pairs that are allowed by the operational and semantic rules of node \(v\). These rules may include semantic compatibility, bounded operational discrepancy, bounded risk difference, membership in acceptable regions, preservation of operational role, support restrictions, or other deployment-specific substitutability constraints.
+
+A common construction is to define a pairwise admissibility set \(K_v \subset Z_v \times Z_v\) and require \(supp(\pi) \subset K_v\). For example, \(K_v\) may contain only pairs \((z,z')\) such that \(z \sim_{sem,v} z'\), \(\Delta_v(z,z')\) is below a tolerance, or both states satisfy appropriate safety constraints. The admissible coupling class should be introduced separately from the ground cost: the coupling class determines which matches are allowed, while the cost determines how expensive allowed matches are. This separation lets the framework distinguish forbidden substitutions from costly but permitted substitutions.
+
+\section*{R24. Decide how hard constraints and soft penalties interact.}
+\addcontentsline{toc}{section}{R24. Decide how hard constraints and soft penalties interact.}
+
+\subsection*{Question}
+
+Clarify whether incompatible transport is forbidden by the admissible coupling class, penalized inside the cost, or both. The paper should avoid double-counting the same restriction.
+
+\subsection*{Answer}
+
+The paper should distinguish between hard admissibility constraints and soft cost penalties. A hard constraint removes a state pair from the admissible coupling class, meaning that no transport plan may match those two states. A soft penalty leaves the pair admissible but assigns a larger operational ground cost to matching it. Hard constraints should be used when a substitution is semantically invalid or operationally forbidden; soft penalties should be used when a substitution is allowed but undesirable, uncertain, or increasingly costly.
+
+The same incompatibility should not be counted twice without justification. If a pair \((z,z')\) is excluded from the admissible set \(K_v\), then an additional finite penalty for that same incompatibility is unnecessary because the match is already forbidden. If the paper wants both mechanisms, it should state their different roles: \(\Pi_{v,adm}\) encodes categorical admissibility, while \(c_{v,op}\) encodes graded cost among admissible pairs. In the limiting view, an infinite penalty in the cost can represent a hard constraint, but the main exposition should keep hard constraints and soft penalties conceptually separate.
+
+\section*{R25. Decide the role of unbalanced transport.}
+\addcontentsline{toc}{section}{R25. Decide the role of unbalanced transport.}
+
+\subsection*{Question}
+
+Specify when full mass matching is inappropriate and why the unbalanced variant is needed. It should be framed as a principled extension, not an optional decoration.
+
+\subsection*{Answer}
+
+The balanced operational transport object assumes that all mass from one node-wise law must be matched to all mass in the other node-wise law. This is appropriate when the two domains represent comparable populations of internal states and full substitution is meaningful. However, in deployed systems, some mass may correspond to states that have no admissible or operationally meaningful counterpart in the other domain. This can occur when one domain contains failure modes, rare artifacts, missing objects, spurious detections, severe glare, occlusions, sensor corruption, or other states that should not be forced into a match.
+
+Unbalanced operational transport should therefore be introduced as an extension for cases where full mass matching is not appropriate. In this version, the transport plan may leave some mass unmatched or reweighted, while divergence penalties control how much mismatch is allowed. The role of the unbalanced variant is to distinguish ``expensive but matchable'' variation from ``not meaningfully matchable'' variation. The balanced formulation should remain the default construction, and the unbalanced formulation should be used when deployment shift changes the amount, support, or operational validity of the node-wise mass.
+
+\section*{R26. Define the node-wise operational transport object.}
+\addcontentsline{toc}{section}{R26. Define the node-wise operational transport object.}
+
+\subsection*{Question}
+
+State the node-level distance or divergence cleanly after the cost and admissible coupling class have been introduced. The notation should make clear whether it is a metric, pseudo-metric, divergence, or just an optimization value.
+
+\subsection*{Answer}
+
+For a selected node \(v\) and two probability laws \(\mu\) and \(\nu\) on the node state space \(Z_v\), the node-wise operational transport value is defined by minimizing the operational ground cost over the admissible coupling class. In the balanced case, this is
+\[
+W_{v,op}(\mu,\nu)^p = \inf_{\pi \in \Pi_{v,adm}(\mu,\nu)} \int_{Z_v \times Z_v} c_{v,op}(z,z')\, d\pi(z,z').
+\]
+Here \(c_{v,op}\) is the node-wise operational ground cost and \(\Pi_{v,adm}(\mu,\nu)\) is the admissible subset of the ordinary coupling set \(\Pi(\mu,\nu)\). When comparing two deployment domains \(d\) and \(d'\), the object of interest is \(W_{v,op}(\mu_v^d, \mu_v^{d'})\), or its shared-space analogue if the node laws have first been aligned into a common comparison space.
+
+Until metric properties are proved under explicit assumptions, \(W_{v,op}\) should be called a node-wise operational transport value, discrepancy, or divergence, not automatically a distance. It becomes a pseudo-metric, metric, or Wasserstein-type distance only under additional conditions on the state space, cost, admissible coupling class, and zero-cost equivalence relation.
+
+\section*{R27. Define the system-level aggregation rule.}
+\addcontentsline{toc}{section}{R27. Define the system-level aggregation rule.}
+
+\subsection*{Question}
+
+Resolve how node-wise distances combine into a system-level discrepancy. Decide whether aggregation is a weighted sum, maximum, learned aggregation, risk-weighted aggregation, or a general monotone functional.
+
+\subsection*{Answer}
+
+After defining node-wise operational transport values, the paper defines a system-level operational discrepancy by aggregating over a declared selected node set \(V_{sel} \subset V\). For two deployment domains \(d\) and \(d'\), the system-level object has the form \(D_{op}(d,d') = A(\{W_{v,op}(\mu_v^d, \mu_v^{d'})\}_{v \text{ in } V_{sel}})\), where \(A\) is an aggregation functional from node-wise discrepancies to a nonnegative scalar. The simplest instantiation is a weighted aggregation, for example a sum over selected nodes with nonnegative weights \(\omega_v\).
+
+The aggregation rule should be stated separately from the node-wise transport construction. Node-wise transport explains how operational geometry is induced at one internal state space; aggregation explains how multiple operationally relevant nodes are combined into a system-level comparison. The selected nodes and aggregation weights should reflect the role of each node in downstream operational behavior, rather than being treated as arbitrary numerical tuning choices.
+
+\section*{R28. Define the safe target law.}
+\addcontentsline{toc}{section}{R28. Define the safe target law.}
+
+\subsection*{Question}
+
+Clarify what a safe target law is and how it differs from simply using low-loss training examples. This is important because the proposal explicitly wants a safety-directed representation target, not just empirical risk minimization.
+
+\subsection*{Answer}
+
+A safe target law \(Q_v\) is a probability measure on the node state space \(Z_v\), or on the shared comparison space when alignment is used, that represents a desired distribution of operationally acceptable internal states. A natural requirement is that the support of \(Q_v\) lies inside the acceptable region \(A_v(\tau)\), or at least assigns negligible mass to the failure region \(B_v(\kappa)\). The safe target law is used when the goal is not only to compare two domains, but to move or regularize domain-induced node laws toward operationally acceptable behavior.
+
+The safe target law should not be defined as merely the empirical distribution of low-loss training examples. It may be specified by domain knowledge, constructed from validated safe states, estimated from trusted deployment data, or defined through constraints on risk, semantics, and operational coverage. Its role is to represent an operationally acceptable target distribution, not simply a low-training-error cluster. This distinction is necessary because the paper's goal is safety-directed or operation-directed representation geometry, not ordinary empirical risk minimization.
+
+\section*{R29. Define the learnable object set.}
+\addcontentsline{toc}{section}{R29. Define the learnable object set.}
+
+\subsection*{Question}
+
+List what may be learned: projection maps, manifold coordinates, risk estimators, semantic descriptors, cost parameters, safe target distributions, and aggregation weights. Also state what is not learned.
+
+\subsection*{Answer}
+
+The paper should explicitly list which objects may be learned, estimated, or selected in practical instantiations. These may include alignment maps, representation coordinates, semantic descriptor maps, risk estimators, operational cost components, cost weights, admissibility thresholds, safe target laws, and aggregation weights. These objects can be collected into a parameter set \(\Theta\) when an optimization formulation is introduced.
+
+The paper should also separate learned objects from fixed modeling primitives. The deployed graph, node spaces, terminal evaluation layer, risk functional, and basic admissibility interpretation should be specified before learning is introduced. Learned versions should use parameterized notation, such as \(r_{v,\Theta}\), \(c_{v,op,\Theta}\), or \(Q_{v,\Theta}\), so that the reader can distinguish the ideal mathematical construction from its estimated or optimized implementation.
+
+\section*{R30. Define anti-collapse requirements.}
+\addcontentsline{toc}{section}{R30. Define anti-collapse requirements.}
+
+\subsection*{Question}
+
+State the conditions or design rules that prevent trivial solutions, such as mapping all representations into one point, making the cost zero, or defining the safe target law circularly.
+
+\subsection*{Answer}
+
+The framework must include explicit anti-collapse requirements to prevent trivial solutions. Without such requirements, a learned representation, alignment map, cost, or safe target law could collapse all states into a single point, assign zero cost to all matches, or define safety circularly so that every state appears acceptable. Such collapse would destroy the intended operational meaning of the geometry.
+
+Anti-collapse conditions should ensure that operationally consequential variation remains distinguishable. At minimum, the paper should require that states with meaningfully different downstream operational behavior are not identified at zero cost unless the chosen equivalence relation explicitly permits it. If learnable maps or costs are used, regularization or constraints should preserve semantic compatibility, downstream risk separation, and nontrivial support structure. The purpose of these requirements is to make sure that the geometry collapses only operationally harmless variation, not information needed for terminal behavior.
+
+\section*{R31. Define the zero-distance interpretation.}
+\addcontentsline{toc}{section}{R31. Define the zero-distance interpretation.}
+
+\subsection*{Question}
+
+Before proving anything, state what zero distance is intended to mean: two representation laws are equivalent only up to transformations that preserve downstream operational behavior. This is the central interpretive claim.
+
+\subsection*{Answer}
+
+The zero-value case of the operational transport object should be interpreted as operational equivalence, not ordinary equality of representations. For a selected node \(v\), \(W_{v,op}(\mu,\nu) = 0\) should mean that the two node-wise laws can be coupled through admissible state pairs whose operational cost is zero. In words, the variation between the two laws is collapsible because it does not change the downstream operational behavior under the declared risk, semantic compatibility, and admissibility structure.
+
+This interpretation must be stated before any theorem is proved. The intended meaning is that zero operational transport identifies only those representation variations that are harmless for the terminal behavior of the deployed system. If two states or laws differ in a way that changes downstream risk, violates semantic compatibility, changes terminal output in an operationally relevant way, or falls outside the admissible coupling structure, then they should not be identified at zero cost. Thus, zero distance is not a claim that two representations are numerically identical; it is a claim that they are equivalent under the operational geometry induced by the deployed system.
+
+\section*{R32. Define the quotient-space interpretation.}
+\addcontentsline{toc}{section}{R32. Define the quotient-space interpretation.}
+
+\subsection*{Question}
+
+If zero distance creates equivalence classes, decide whether the paper explicitly frames the construction as a quotient geometry. This should be introduced carefully because it is mathematically strong and reviewer-sensitive.
+
+\subsection*{Answer}
+
+For a selected node \(v\), the zero-value relation \(W_{v,op}(\mu,\nu)=0\) should be interpreted as operational equivalence between node-wise laws, not as equality of representations. If the admissible coupling class and zero-cost state relation satisfy the required equivalence assumptions, this zero relation may define a quotient space of node-wise laws. In that quotient, two laws are identified only when their difference can be matched through admissible zero-cost pairs that preserve the terminal operational behavior relevant to the deployed system. If these assumptions are not available, the object should be called an operational transport discrepancy rather than a quotient metric.
+
+\section*{R33. Build the assumption taxonomy.}
+\addcontentsline{toc}{section}{R33. Build the assumption taxonomy.}
+
+\subsection*{Question}
+
+Create a clean list of assumptions grouped by object: system assumptions, space assumptions, risk assumptions, cost assumptions, coupling assumptions, statistical assumptions, and streetlight-instantiation assumptions.
+
+\subsection*{Answer}
+
+The paper should group assumptions by the object they support. The base construction needs a finite DAG, measurable node spaces, measurable node maps, deployment-domain input laws, and induced node-wise laws. The transport construction needs Polish or metric node spaces, measurable or lower-semicontinuous operational costs, finite cost on relevant pairs, and nonempty admissible coupling classes. Stronger claims need stronger assumptions: pseudo-metric or quotient claims require a well-defined zero-cost equivalence relation, while stability claims require explicit control of perturbations in node laws, risks, costs, or admissible sets. Application-specific assumptions, such as streetlight audit risk or semantic compatibility, should be separated from the general framework assumptions.
+
+\section*{R34. Decide what belongs in the main theorem package.}
+\addcontentsline{toc}{section}{R34. Decide what belongs in the main theorem package.}
+
+\subsection*{Question}
+
+Even though proofs are excluded from this task list, the paper still needs theorem targets stated in the right order. Resolve which theorem statements are main-text commitments and which are appendix-level or future work.
+
+\subsection*{Answer}
+
+The main theorem package should be compact and follow the construction. The first theorem should show that the node-wise operational transport value is well-defined under the stated space, cost, and admissibility assumptions. The second should state when zero operational transport corresponds to downstream-operational equivalence. The third should state a stability result showing that small perturbations of node laws, risk functions, costs, or admissible sets do not arbitrarily change the transport value. The fourth should state when the construction gives a pseudo-metric, quotient distance, or Wasserstein-type discrepancy. Claims about estimation, learning, causal identifiability, or deployment guarantees should remain separate unless they are explicitly proved.
+
+\section*{R35. Build the related-work map.}
+\addcontentsline{toc}{section}{R35. Build the related-work map.}
+
+\subsection*{Question}
+
+Separate related work into optimal transport for domain adaptation, task-aware OT, learned ground costs, invariant/equivariant representation learning, decision-focused learning, safe representation learning, and CPS deployment robustness.
+
+\subsection*{Answer}
+
+The related work should be organized around the gap that Operational Transport Geometry addresses. Classical OT for domain adaptation compares source and target distributions, but usually does not make terminal deployment behavior induce a node-wise geometry inside a multi-stage system. Task-aware OT and decision-focused learning use downstream task information, but usually attach it to a loss, predictor, or decision objective rather than to admissible transport between internal node laws. Learned ground-cost and metric-learning methods adapt the matching cost, but do not by themselves specify which internal states are operationally substitutable, forbidden, or collapsible.
+
+Invariant and equivariant representation learning studies what variation should be removed or preserved, but usually does not express this as a transport problem with admissible couplings over domain-induced internal laws. Safe and robust representation learning studies reliability under shift, but often lacks an explicit probability-geometric object that separates harmless internal variation from operationally consequential variation. The paper should position Operational Transport Geometry at the intersection of these lines, with the specific contribution being terminal-behavior-induced transport geometry for internal representation laws of deployed multi-stage systems.
+
+\section*{R36. Write the novelty comparison grid.}
+\addcontentsline{toc}{section}{R36. Write the novelty comparison grid.}
+
+\subsection*{Question}
+
+For each related area, state what it already does and what it does not do. The key gap should be: existing work usually attaches task information to a predictor, discrepancy, or loss, while this paper makes terminal operational behavior induce geometry inside the deployed system.
+
+\subsection*{Answer}
+
+The strongest framing from our own proposal is: Operational Transport Geometry claims that terminal operational evaluation induces node-wise risk, which then shapes operational costs, admissible couplings, and transport geometry over domain-induced node laws. The proposal also says the paper must characterize zero-distance equivalence and when operationally consequential variations cannot be collapsed.
+
+\begin{landscape}
+\scriptsize
+\begin{longtable}{@{}P{0.12\linewidth} P{0.13\linewidth} P{0.22\linewidth} P{0.19\linewidth} P{0.23\linewidth}@{}}
+\toprule
+\textbf{Literature line} & \textbf{Representative work} & \textbf{What it already does well} & \textbf{Why it challenges us} & \textbf{What Operational Transport Geometry must claim instead}\\
+\midrule
+\endfirsthead
+\toprule
+\multicolumn{5}{@{}l}{\textit{R36 novelty comparison grid continued.}}\\
+\midrule
+\textbf{Literature line} & \textbf{Representative work} & \textbf{What it already does well} & \textbf{Why it challenges us} & \textbf{What Operational Transport Geometry must claim instead}\\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Classical OT for domain adaptation & Courty et al.; WDGRL; DeepJDOT & Uses OT or Wasserstein discrepancy to align source and target distributions. Courty et al. formulate regularized OT for domain alignment; WDGRL learns domain-invariant features by minimizing estimated Wasserstein distance; DeepJDOT aligns joint feature-label structure rather than only marginal features. & A reviewer may say our method is just OT domain adaptation with a more complicated cost. DeepJDOT is especially close because it already uses task-label structure in the transport objective. & Our distinction must be node-wise and operational: we do not merely align source-target feature laws for prediction transfer; we define transport over internal node laws of a deployed multi-stage system, where terminal operational evaluation induces risk, admissibility, and cost.\\
+Task-oriented domain alignment & ToAlign; task-discriminative domain alignment; margin-aware OT domain adaptation & These methods already argue that not all features should be aligned. ToAlign explicitly decomposes features into task-related components that should be aligned and task-irrelevant components that should be ignored; margin-aware OT domain adaptation makes the OT distance task-dependent through classification-margin structure. & This is a serious challenge because our slogan ``collapse harmless variation, preserve consequential variation'' overlaps with task-oriented alignment. & We must avoid claiming that we invented selective alignment. Our sharper claim is that we formalize selective alignment as a transport geometry over internal node laws, with admissible couplings and zero-cost operational equivalence induced by terminal behavior, not merely by classifier relevance.\\
+Learned ground costs and metric learning in OT & Cuturi and Avis; MLOT; Paty and Cuturi & Ground Metric Learning learns the ground cost used in OT; MLOT jointly learns a Mahalanobis metric and an OT plan for domain adaptation; ground-cost-adversarial OT studies robustness and maximization over costs. & A reviewer may say our operational cost is just another learned ground cost. This is probably the most direct mathematical criticism of the cost layer. & We must state that learning or specifying the cost is not the whole contribution. The cost is only one part of the object; the full construction includes terminally induced node-wise risk, semantic admissibility, restricted couplings, zero-equivalence interpretation, and system-level aggregation over a deployed DAG.\\
+Robust, partial, and subspace OT & Subspace Robust Wasserstein; outlier-robust OT; partial/universal OT alignment & These works already modify OT to avoid bad alignments, high-dimensional instability, irrelevant features, outliers, or non-overlapping support. Subspace Robust Wasserstein searches over informative subspaces; outlier-robust OT avoids contamination; universal/partial OT variants handle private or unmatched classes. & This challenges our admissible-coupling and unbalanced-transport story: the literature already has mechanisms for restricting, trimming, or partially matching mass. & We must position admissibility as operational, not only statistical or structural. Our admissible pairs are determined by semantic substitutability and downstream operational consequence inside a deployed system, not only by outlier status, subspace robustness, or class overlap.\\
+Invariant and equivariant representation learning & IRM; invariant-equivariant representation learning; theory of invariant representation limits & IRM seeks representations that support invariant predictors across environments; invariant/equivariant models explicitly separate factors to collapse from factors to preserve; Zhao et al. show that invariant representations can hurt domain adaptation when label distributions differ. & This line directly challenges our ``what to collapse'' motivation. It also warns that naive invariance can remove useful information. & We should explicitly say OTG is not ``make representations invariant.'' It is a framework for defining which internal variations are operationally equivalent, costly, or inadmissible. This lets us preserve consequential variation rather than enforcing global invariance.\\
+Decision-focused learning and predict-then-optimize & SPO; OptNet; decision-focused learning surveys; decision-aware OT dataset distance & SPO trains prediction models using decision error; OptNet differentiates through optimization layers; decision-focused learning integrates prediction with downstream constrained optimization; recent decision-aware OT dataset distance incorporates downstream decisions into an OT distance for predict-then-optimize transfer. & This is the strongest challenge to the phrase ``terminal behavior matters.'' Decision-focused learning already says predictions should be judged by downstream decision quality, and decision-aware OT already builds an OT distance with decisions. & Our claim must be internal-geometry-specific: decision-focused learning usually changes the training loss or decision objective; decision-aware OT compares datasets with features, labels, and decisions. OTG instead induces node-wise risk and admissible transport geometry inside a deployed multi-stage graph.\\
+Safe and robust representation learning / DRO & Group DRO and related robust optimization & Group DRO optimizes worst-group performance under predefined groups and shows that average accuracy can hide severe group failures. This directly supports the idea that deployment-relevant risk is not captured by average prediction performance. & A reviewer may say this is just robustness or worst-case risk under another name. & We should distinguish risk objective from geometry. DRO gives a robust training criterion; OTG defines a transport-geometric object over node-wise laws, where risk shapes costs, admissibility, and equivalence classes.\\
+Causal representation learning and intervention-based reasoning & Scholkopf et al.; invariant causal prediction & Causal representation learning studies high-level causal variables, interventions, and transfer/generalization; invariant causal prediction uses invariance across environments for causal identification. & Our use of intervention notation \(do(z_v=z)\) can be challenged: are we making a causal-identification claim, or just defining a downstream-execution operator? & We must be precise: OTG uses intervention as a formal downstream-execution semantics for assigning operational consequence to internal states. It should not claim causal identifiability unless a separate causal section supplies the assumptions.\\
+Structured deployed systems and differentiable pipelines & OptNet; decision-focused learning & OptNet and decision-focused learning show that downstream modules, constraints, and optimization layers can be integrated into learning pipelines. & A reviewer may ask whether the deployed DAG is just a standard differentiable computational graph with a downstream loss. & We must argue that the DAG is not introduced just for backpropagation. It is used to define node-wise laws, node interventions, operational risks, admissible couplings, and transport discrepancies at internal stages.\\
+\end{longtable}
+\end{landscape}
+
+\textbf{Strongest novelty claim after the literature check.}
+
+The defensible novelty is not ``we use OT for domain adaptation,'' not ``we learn a better ground cost,'' not ``we use downstream task loss,'' and not ``we decide what features to align.'' Those all exist in serious forms.
+
+The defensible novelty is: Operational Transport Geometry defines a node-wise probability-geometric object for deployed multi-stage systems: terminal operational evaluation induces internal risk functions, and these risks shape operational costs, admissible coupling classes, zero-equivalence relations, and transport discrepancies between domain-induced internal node laws.
+
+\textbf{Most dangerous related-work threats.}
+
+The biggest threat is decision-aware OT for predict-then-optimize, because it already combines OT with downstream decisions. We must distinguish it by saying that it compares datasets or task instances using downstream decisions, while we define internal node-wise operational geometry inside a deployed DAG.
+
+The second-biggest threat is ToAlign and task-oriented alignment, because it already studies which feature components should be aligned or ignored. We must distinguish our object by emphasizing admissible transport over node laws and terminal-behavior-induced risk, not classification-guided feature decomposition alone.
+
+The third-biggest threat is learned OT ground costs, because our cost could look arbitrary. We must make clear that the cost is not the whole contribution; it is part of a larger operational geometry with risk, admissibility, equivalence, and system aggregation.
+
+\section*{R37. Prepare canonical examples.}
+\addcontentsline{toc}{section}{R37. Prepare canonical examples.}
+
+\subsection*{Question}
+
+Construct small, non-empirical examples showing how the framework behaves: harmless shift, harmful shift, semantic mismatch, high-risk collapse, admissible transport, inadmissible transport, and safe-target transport.
+
+\subsection*{Answer}
+
+The paper should include small canonical examples that show how the framework behaves before the full streetlight instantiation. These examples should be mathematical and minimal, not empirical. The required examples are: a harmless shift that receives zero or low cost, a harmful shift that receives positive cost, a semantic mismatch that is inadmissible despite similar risk, a high-risk collapse that anti-collapse rules forbid, an admissible coupling between operationally substitutable states, an inadmissible coupling between non-substitutable states, and a safe-target transport example.
+
+Each example should isolate one mechanism. The purpose is to make the definitions interpretable: risk handles downstream consequence, semantic compatibility handles meaningful matching, admissibility handles forbidden substitutions, the ground cost handles graded penalty, and safe target laws handle operation-directed movement. These examples should appear before or alongside the applied streetlight section.
+
+\section*{R38. Prepare a minimal running example.}
+\addcontentsline{toc}{section}{R38. Prepare a minimal running example.}
+
+\subsection*{Question}
+
+Use one clean running example throughout the paper, preferably a simplified detection-to-measurement pipeline. It should be small enough to clarify the definitions without becoming an experiment.
+
+\subsection*{Answer}
+
+The paper should use one minimal running example throughout the formal sections. The best running example is a simplified detection-to-measurement pipeline with four stages: input observation, representation node, measurement node, and terminal report. The representation node produces internal states, the measurement node computes an operational quantity, and the terminal report is evaluated by an operational loss or structured evaluator.
+
+This running example should be simple enough that every object can be named explicitly: node state space, domain-induced law, terminal evaluation, intervention, risk, semantic compatibility, cost, admissible coupling, and node-wise transport. It should not be overloaded with the full streetlight system. Its role is to keep the formal construction readable while the full streetlight audit pipeline remains the richer application.
+
+\section*{R39. Formalize the streetlight auditing instantiation.}
+\addcontentsline{toc}{section}{R39. Formalize the streetlight auditing instantiation.}
+
+\subsection*{Question}
+
+Define the actual nodes: input video, detector, tracker, representation, measurement estimator, audit-report generator, and terminal operational output. Then define the relevant shifts: glare, scale, viewpoint, blur, occlusion, compression, road geometry, and sensor variation.
+
+\subsection*{Answer}
+
+The streetlight-auditing section should instantiate the graph with concrete nodes: video input, detector, tracker, representation node, measurement estimator, and audit-report generator. The terminal output should be the audit report, including quantities such as useful illumination, coverage, adequacy, glare or confounder penalties, and uncertainty flags. Deployment shifts should include glare, viewpoint, scale, blur, occlusion, compression, road geometry, and sensor quality.
+
+The section should map each abstract object to a streetlight-specific object. Node laws become distributions of detector, tracker, representation, or measurement states under different deployment conditions. Terminal evaluation becomes audit-report quality. Node-wise risk becomes the downstream audit harm caused by an internal state. Operational transport then compares whether two deployment conditions produce internal states that are operationally substitutable, costly, or inadmissible.
+
+\section*{R40. Define streetlight-specific operational risk.}
+\addcontentsline{toc}{section}{R40. Define streetlight-specific operational risk.}
+
+\subsection*{Question}
+
+Specify what downstream harm means in the streetlight system: wrong useful-illumination report, wrong coverage estimate, wrong adequacy flag, wrong glare/confounder penalty, or wrong uncertainty flag.
+
+\subsection*{Answer}
+
+In the streetlight instantiation, operational risk should measure downstream audit harm rather than detector error alone. A state should have high risk if, when propagated through the downstream system, it causes the final report to be wrong or unreliable in an operationally relevant way. This includes incorrect useful-illumination estimates, wrong coverage or adequacy judgments, missed glare/confounder flags, false confidence, poor uncertainty calibration, or incorrect localization of the affected road region.
+
+The risk definition should remain tied to terminal behavior. A detection error is important only insofar as it changes the final audit report. Conversely, a representation perturbation may be harmless if the audit report remains stable and correct. This is the main applied interpretation of Operational Transport Geometry in the streetlight setting: it separates visual or representational variation that the audit can absorb from variation that changes the operational report.
+
+\section*{R41. Define streetlight-specific semantic compatibility.}
+\addcontentsline{toc}{section}{R41. Define streetlight-specific semantic compatibility.}
+
+\subsection*{Question}
+
+Clarify when two streetlight representations are semantically compatible: same physical lamp, same region, same operational role, same illumination-relevant structure, or same semantic anchor class.
+
+\subsection*{Answer}
+
+In the streetlight instantiation, semantic compatibility should define when two internal states are meaningful candidates for matching as the same kind of audit-relevant object. Two states may be semantically compatible if they refer to the same physical lamp, the same road segment, the same illumination-relevant region, the same lamp category, or the same operational role in the audit pipeline. This compatibility should be defined independently from numerical closeness in feature space and independently from low risk.
+
+The purpose of streetlight-specific semantic compatibility is to prevent invalid matching. For example, a representation of a bright shop sign should not be matched to a streetlight representation merely because both appear as bright regions. A false positive glare artifact should not be treated as compatible with a real lamp unless the audit task explicitly allows that substitution. Semantic compatibility therefore protects the transport problem from collapsing visually similar but operationally different objects.
+
+\section*{R42. Define streetlight-specific admissible transport.}
+\addcontentsline{toc}{section}{R42. Define streetlight-specific admissible transport.}
+
+\subsection*{Question}
+
+State which representation substitutions are allowed and which are forbidden. For example, viewpoint variation may be admissible if the final audit report is preserved, while glare-induced false adequacy may be inadmissible.
+
+\subsection*{Answer}
+
+In the streetlight instantiation, the admissible coupling class should specify which state substitutions are allowed during transport between deployment conditions. A pair of states may be admissible when they are semantically compatible and when replacing one by the other does not change the downstream audit report beyond an acceptable tolerance. Viewpoint, scale, mild blur, or exposure variation may be admissible if the final audit report remains stable. Severe glare, occlusion, false detections, missed lamps, or corrupted measurements may be inadmissible if they change the useful-illumination, coverage, adequacy, glare, or uncertainty components of the report.
+
+This admissibility layer is the main difference between ordinary feature alignment and operational alignment in the streetlight case. The transport plan should not be allowed to match states only because they are close in latent space. It should match states only when the substitution is semantically meaningful and operationally valid for the audit task.
+
+\section*{R43. Decide whether the applied section is motivating, illustrative, or validating.}
+\addcontentsline{toc}{section}{R43. Decide whether the applied section is motivating, illustrative, or validating.}
+
+\subsection*{Question}
+
+The proposal currently uses streetlight auditing as the applied instantiation. The final paper must decide whether this is a motivating example, a formal case study, or an experimental validation setting.
+
+\subsection*{Answer}
+
+The streetlight-auditing section should be presented as a formal instantiation and motivating case study, not as the primary contribution of the paper. Its role is to show how Operational Transport Geometry becomes concrete in a deployed perception-to-measurement pipeline. The section should map the abstract objects to streetlight-specific objects: graph nodes, node laws, terminal report, operational risk, semantic compatibility, admissible couplings, operational cost, and safe target laws.
+
+The applied section should be strong enough to demonstrate that the framework is not purely abstract, but it should not force the paper to become a streetlight-systems paper. The core contribution remains the mathematical construction. The streetlight case should serve as the main running deployment example and, if evidence is added later, as the experimental instantiation.
+
+\section*{R44. Build the figure plan.}
+\addcontentsline{toc}{section}{R44. Build the figure plan.}
+
+\subsection*{Question}
+
+Prepare the minimum necessary figures: full DAG-to-transport pipeline, node-wise operational geometry, admissible versus inadmissible couplings, quotient interpretation, and streetlight instantiation.
+
+\subsection*{Answer}
+
+The paper should use a controlled figure sequence that mirrors the logical construction of Operational Transport Geometry. Each figure should correspond to one formal dependency in the framework, so that the reader can move from deployed system, to internal risk, to operational cost, to admissible transport, to quotient interpretation, and finally to the streetlight instantiation. The figures should be explanatory rather than decorative, and each should be referenced directly in the text at the point where the corresponding object is defined.
+
+Figure 1 should present the deployed system model as a finite directed acyclic graph. It should show an input space \(X\), internal nodes \(v\) in \(V\) with state spaces \(Z_v\), directed edges representing information flow, selected internal nodes \(V_{sel}\), terminal nodes \(T\), the terminal output space \(Y\), and the terminal operational evaluation \(E_{op}\). The purpose of this figure is to establish the modeling layer: the real deployed pipeline is represented as a finite graph whose internal states can be studied node-wise.
+
+Figure 2 should show the intervention-to-risk construction. It should isolate one internal node \(v\), replace the usual upstream computation at \(v\) with an intervention \(do(z_v = z)\), execute the downstream subgraph, produce an interventional terminal output \(Y^{do(z_v=z)}\), and then apply \(E_{op}\) or \(L_{op}\) to obtain \(r_v(z)\). The purpose of this figure is to make clear that terminal evaluation is applied at the final output, while risk is induced on internal states.
+
+Figure 3 should show the operational geometry at a single node. It should depict the node state space \(Z_v\) or representation space \(M_v\), low-risk region \(A_v(\tau)\), high-risk region \(B_v(\kappa)\), semantic compatibility structure, operational discrepancy \(\Delta_v\), and operational ground cost \(c_{v,op}(z,z')\). The figure should visually separate geometric closeness from operational substitutability, because two states may be close in representation space but not admissible, or far in representation space but operationally harmless.
+
+Figure 4 should show admissible versus inadmissible transport between two domain-induced node laws \(\mu_v^d\) and \(\mu_v^{d'}\). It should show two distributions on the same node space or shared comparison space, with admissible coupling arrows between semantically and operationally valid pairs, and blocked or penalized arrows for invalid substitutions. The purpose of this figure is to explain that Operational Transport Geometry is not ordinary feature alignment: transport plans are constrained by admissibility and shaped by downstream operational cost.
+
+Figure 5 should show the zero-equivalence or quotient interpretation. It should show operationally harmless variations collapsing into the same equivalence class, while operationally consequential variations remain separated by positive cost or inadmissibility. This figure should not claim a quotient metric automatically; it should visually support the conditional interpretation that zero operational transport identifies only variations that preserve terminal behavior under the declared assumptions.
+
+Figure 6 should show the system-level aggregation. It should show node-wise operational transport values \(W_{v,op}\) across selected nodes \(V_{sel}\) being aggregated into a system-level discrepancy \(D_{op}(d,d')\). The figure should clarify that the framework is node-wise first and system-level second: the global discrepancy is built from declared node-wise comparisons rather than imposed directly on the whole system.
+
+Figure 7 should show the streetlight-auditing instantiation. It should map the abstract DAG to concrete stages: video input, detector, tracker, representation node, measurement estimator, and audit-report generator. It should also show terminal audit outputs such as useful illumination, coverage, adequacy, glare or confounder flags, and uncertainty. This figure should connect abstract objects to the deployment case without turning the whole paper into a systems diagram.
+
+The final paper does not need all seven figures in the main text. A compact version should include Figures 1, 2, 4, and 7 in the main paper, with Figures 3, 5, and 6 used if space permits or moved to an appendix. The figure order should follow the conceptual order: graph model, intervention-induced risk, node-wise operational transport, quotient interpretation, system aggregation, and streetlight instantiation.
+
+\section*{R45. Build the section-by-section paper skeleton.}
+\addcontentsline{toc}{section}{R45. Build the section-by-section paper skeleton.}
+
+\subsection*{Question}
+
+Write the final outline with exact section purposes: introduction, preliminaries, system model, operational risk, operational geometry, transport construction, properties, streetlight instantiation, related work, limitations, conclusion.
+
+\subsection*{Answer}
+
+The paper should be organized so that every section introduces only the objects needed for the next section. The structure should avoid beginning with the streetlight application or with a large theorem statement. The correct order is to first define the deployed system and node-wise laws, then define terminal evaluation and induced risk, then define operational geometry and transport, then discuss properties, examples, application, related work, and limitations.
+
+Section 1, Introduction, should state the problem and central claim. It should explain that deployed ML systems are often multi-stage computational pipelines, and that ordinary domain alignment can collapse variation that is operationally consequential. The introduction should state the main idea: terminal operational behavior can induce geometry on internal representation laws. It should then list the paper's contributions: the deployed DAG formalism, node-wise operational risk, operational ground costs, admissible couplings, node-wise and system-level transport discrepancies, and the streetlight-auditing instantiation.
+
+Section 2, Preliminaries, should introduce only the required mathematical background. This includes measurable spaces, probability laws, pushforwards, couplings, Kantorovich optimal transport, Wasserstein-type notation, and the distinction between a ground cost, a transport value, and a metric. This section should be short and should not attempt a full OT tutorial. Its purpose is to make the later definitions self-contained.
+
+Section 3, Deployed System Model, should define the finite directed acyclic graph \(G=(V,E)\), node state spaces \(Z_v\), parent sets \(Pa(v)\), measurable node maps \(F_v\), upstream maps \(\Phi_v\), deployment domains \(d\) in \(D\), input laws \(P_d\), and node-wise laws \(\mu_v^d = (\Phi_v)_\# P_d\). It should also define selected nodes \(V_{sel}\) and explain when a shared comparison space is needed for cross-domain transport. This section establishes the probability objects that later enter the transport problem.
+
+Section 4, Terminal Evaluation and Node-Wise Risk, should define the terminal output map \(H\), terminal output space \(Y\), operational evaluation \(E_{op}\), scalar operational loss \(L_{op}\) when needed, intervention semantics \(do(z_v = z)\), downstream map \(G_v\), and node-wise operational risk \(r_v\). It should also define how \(r_v\) is computed or estimated through downstream execution or rollout. This section is the conceptual core: final behavior is evaluated at the output, but operational consequence is assigned to internal states.
+
+Section 5, Operational Regions and Compatibility, should define low-risk regions \(A_v(\tau)\), high-risk regions \(B_v(\kappa)\), semantic compatibility \(z \sim_{sem,v} z'\), descriptor maps \(s_v\), descriptor spaces \(S_v\), and operational discrepancy \(\Delta_v\). This section separates three notions that should not be conflated: geometric closeness, semantic compatibility, and downstream operational similarity.
+
+Section 6, Operational Transport Geometry, should define the operational ground cost \(c_{v,op}\), admissible coupling class \(\Pi_{v,adm}\), balanced node-wise operational transport \(W_{v,op}\), unbalanced operational transport when full mass matching is inappropriate, and system-level aggregation \(D_{op}\). This section should be definition-heavy and should clearly state when \(W_{v,op}\) is only a discrepancy and when it may be called a distance under additional assumptions.
+
+Section 7, Formal Properties, should state the compact theorem package. The first result should address well-definedness of \(W_{v,op}\); the second should address the zero-value or operational-equivalence interpretation; the third should address stability under perturbations of laws, risks, costs, or admissible sets; and the fourth should address pseudo-metric, quotient, or Wasserstein-type status under stronger assumptions. This section should not overpromise estimation, learning, or causal-identification guarantees unless those are proved separately.
+
+Section 8, Canonical Examples and Running Example, should present minimal examples that isolate the framework's mechanisms. These should include harmless shift, harmful shift, semantic mismatch, forbidden high-risk collapse, admissible coupling, inadmissible coupling, and safe-target transport. The simplified detection-to-measurement running example should be used here to show all objects in a small concrete pipeline before introducing the full streetlight case.
+
+Section 9, Streetlight-Auditing Instantiation, should map the abstract framework to the real deployment problem. It should define the streetlight graph nodes, domain shifts, audit-report output, audit-specific operational risk, semantic compatibility, admissible transport, operational cost, and safe target law. This section should show that the framework can express why some shifts, such as mild viewpoint or scale change, may be harmless, while others, such as glare-induced false adequacy or missed lamp detections, are operationally consequential.
+
+Section 10, Related Work, should use the novelty comparison grid. It should compare against OT domain adaptation, task-aware OT, learned ground-cost methods, robust and partial OT, invariant representation learning, decision-focused learning, safe/robust learning, causal representation learning, and differentiable deployed pipelines. The section should be precise and non-defensive: the novelty is not that downstream behavior matters in general, but that terminal behavior induces node-wise transport geometry inside a deployed multi-stage system.
+
+Section 11, Limitations and Scope, should state the main limitations early and explicitly. These include difficulty of estimating \(r_v\), dependence on declared semantic compatibility, possible nonexistence of admissible couplings, computational cost of constrained or unbalanced OT, approximation error from learned costs, and the fact that intervention notation is a downstream-execution semantics rather than automatic causal identifiability. This section should protect the paper from overclaiming.
+
+Section 12, Conclusion, should restate the final contribution in one paragraph. The conclusion should say that Operational Transport Geometry provides a formal way to compare deployment-induced internal representation laws using terminal operational behavior. It should emphasize the paper's central distinction: internal variation should be collapsed only when it is operationally harmless, and preserved or penalized when it changes downstream system behavior.
+
+\section*{R46. Build the claim-strength hierarchy.}
+\addcontentsline{toc}{section}{R46. Build the claim-strength hierarchy.}
+
+\subsection*{Question}
+
+Classify every claim as definition, interpretation, proposition target, theorem target, empirical expectation, or future-work claim. This prevents overclaiming.
+
+\subsection*{Answer}
+
+The paper should classify every important statement by its claim strength before final drafting. A statement may be a definition, modeling assumption, construction, interpretation, theorem target, empirical expectation, implementation choice, limitation, or future-work claim. Definitions introduce objects; assumptions state the conditions under which objects are used; constructions define how objects are built; interpretations explain the intended meaning; theorem targets are claims that require proof; empirical expectations require evidence; and future-work claims should not be presented as completed results.
+
+This hierarchy is necessary because the paper contains several strong-sounding ideas: operational equivalence, quotient geometry, admissible transport, safe target laws, and terminal-behavior-induced internal geometry. Each of these should be stated at the correct strength. For example, ``\(W_{v,op}\) is a transport discrepancy'' may be a definition, ``zero value corresponds to operational equivalence'' may be a theorem under assumptions, and ``this can improve deployment robustness'' should remain an empirical or future-work claim unless supported by evidence.
+
+\section*{R47. Build the limitations section early.}
+\addcontentsline{toc}{section}{R47. Build the limitations section early.}
+
+\subsection*{Question}
+
+Explicitly state limitations: risk may be hard to estimate, intervention semantics may be approximate, semantic compatibility may be externally supplied, safe target laws may be nonunique, and admissible coupling constraints may be computationally expensive.
+
+\subsection*{Answer}
+
+The limitations section should be written early and should explicitly state where the framework depends on modeling choices. The main limitations are that node-wise risk \(r_v\) may be difficult to compute or estimate, intervention semantics may be only an approximate downstream-execution model, semantic compatibility may require external information, admissible coupling classes may be empty or computationally hard to optimize over, safe target laws may be nonunique, and learned costs may introduce circularity if not separated from evaluation.
+
+The limitations should not weaken the paper; they should clarify its scope. The paper should state that Operational Transport Geometry defines a formal object whose usefulness depends on the quality of the declared graph, terminal evaluation, risk functional, semantic compatibility relation, and admissibility structure. It should also state that causal identifiability, finite-sample estimation, scalable computation, and full deployment validation are separate questions unless they are explicitly proved or tested in the paper.
+
+\section*{R48. Prepare the reviewer-objection list.}
+\addcontentsline{toc}{section}{R48. Prepare the reviewer-objection list.}
+
+\subsection*{Question}
+
+Anticipate objections: ``Is this just a weighted loss?'', ``Is the cost arbitrary?'', ``Does the distance satisfy metric properties?'', ``How is risk estimated?'', ``Why OT?'', ``Why not decision-focused learning?'', ``Why not invariant representation learning?''
+
+\subsection*{Answer}
+
+The paper should prepare direct responses to the most likely reviewer objections. If a reviewer asks whether the method is just a weighted loss, the response is that the weighted expression is only one instantiation of a ground cost; the framework also defines node-wise laws, terminally induced risk, admissible couplings, zero-equivalence structure, and system-level aggregation. If a reviewer asks whether the cost is arbitrary, the response is that the cost components are tied to declared operational objects: downstream risk, terminal output behavior, semantic compatibility, and admissibility.
+
+If a reviewer asks whether the construction is a metric, the response is that it is first defined as a transport value or discrepancy and becomes a pseudo-metric or quotient distance only under additional assumptions. If a reviewer asks how risk is estimated, the response is that the base object uses an ideal induced risk, while applications may use downstream rollout, simulation, analytic computation, or learned estimators. If a reviewer asks why this is not decision-focused learning, invariant representation learning, or OT domain adaptation, the response is that those lines do not generally define terminal-behavior-induced admissible transport geometry over internal node laws of a deployed multi-stage graph.
+
+\section*{R49. Prepare advisor-facing question packets.}
+\addcontentsline{toc}{section}{R49. Prepare advisor-facing question packets.}
+
+\subsection*{Question}
+
+For each person we contact, prepare one precise mathematical question: cost validity, admissible coupling feasibility, quotient geometry, risk estimation, stochastic convergence, topology, or safe-set formulation.
+
+\subsection*{Answer}
+
+For each advisor or expert contacted, the paper team should prepare one short question packet rather than a broad project description. Each packet should contain the one-sentence thesis, the relevant formal object, the current obstruction, and one precise question. The question should be matched to the expert: cost validity for optimal transport experts, admissible-coupling feasibility for OT or optimization experts, quotient geometry for topology or geometry experts, risk estimation for statistics or stochastic-process experts, stability for learning-theory experts, and safe-set formulation for CPS or formal-methods experts.
+
+The purpose of these packets is to get targeted mathematical guidance. The paper should not ask every advisor to judge the whole project. It should ask whether a specific component is well-posed, overclaimed, underspecified, or missing assumptions. Each packet should end with a concrete request, such as ``Which assumptions are needed for this zero-value relation to define a quotient?'' or ``When is the admissible coupling class nonempty under support restrictions?''
+
+\section*{R50. Finalize the writing dependencies.}
+\addcontentsline{toc}{section}{R50. Finalize the writing dependencies.}
+
+\subsection*{Question}
+
+Set the write order: notation table first, system model second, risk layer third, cost and coupling layer fourth, transport object fifth, interpretation sixth, streetlight instantiation seventh, related work eighth, limitations ninth
+
+\subsection*{Answer}
+
+The paper should be written in dependency order rather than presentation order. The first writing dependency is the notation table, because every later section depends on stable symbols. The second is the system model: finite DAG, node spaces, node maps, deployment domains, and node laws. The third is the terminal-evaluation and risk layer: terminal output, operational evaluation, intervention semantics, downstream maps, and node-wise risk. The fourth is the compatibility and region layer: low-risk sets, high-risk sets, semantic compatibility, descriptors, and operational discrepancy.
+
+Only after these are fixed should the paper write the transport layer: operational costs, admissible couplings, balanced and unbalanced node-wise transport, and system-level aggregation. The next dependency is interpretation: zero value, operational equivalence, quotient status, and anti-collapse requirements. After this come canonical examples, the streetlight instantiation, theorem statements, related work, limitations, and final introduction polishing. The introduction should be written last in its final form, because the exact contribution boundary depends on the completed formal construction.
+
+\end{document}

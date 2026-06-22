@@ -1,0 +1,34 @@
+base_config: configs/default.yaml
+worlds:
+  - name: risk_degradation
+    overrides:
+      risk:
+        mode: "true"
+  - name: risk_degradation
+    overrides:
+      risk:
+        mode: noisy
+  - name: risk_degradation
+    overrides:
+      risk:
+        mode: rollout
+  - name: risk_degradation
+    overrides:
+      risk:
+        mode: learned_regression
+        features: state
+  - name: risk_degradation
+    overrides:
+      risk:
+        mode: learned_classifier
+        features: state
+  - name: risk_degradation
+    overrides:
+      risk:
+        mode: learned_mlp
+        features: state
+        mlp_backend: sklearn
+  - name: risk_degradation
+    overrides:
+      risk:
+        mode: misspecified

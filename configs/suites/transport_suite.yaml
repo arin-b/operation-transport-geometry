@@ -1,0 +1,24 @@
+base_config: configs/default.yaml
+worlds:
+  - name: admissibility_stress
+    overrides:
+      transport:
+        solver: lp
+      runtime_values:
+        n: 35
+  - name: admissibility_stress
+    overrides:
+      transport:
+        solver: sinkhorn
+  - name: admissibility_stress
+    overrides:
+      transport:
+        solver: masked_sinkhorn
+  - name: admissibility_stress
+    overrides:
+      transport:
+        solver: unbalanced
+  - name: unbalanced_dangerous_mass
+    overrides:
+      transport:
+        solver: unbalanced

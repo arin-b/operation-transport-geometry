@@ -1,0 +1,30 @@
+base_config: configs/default.yaml
+worlds:
+  - name: harmless_nuisance
+    overrides:
+      transport:
+        solver: masked_sinkhorn
+  - name: harmful_boundary
+    overrides:
+      transport:
+        solver: masked_sinkhorn
+  - name: invariance_misspecification
+    overrides:
+      risk:
+        mode: misspecified
+  - name: risk_degradation
+    overrides:
+      risk:
+        mode: noisy
+  - name: admissibility_stress
+    overrides:
+      admissibility:
+        mode: hard
+  - name: admissibility_stress
+    overrides:
+      admissibility:
+        mode: soft
+  - name: unbalanced_dangerous_mass
+    overrides:
+      transport:
+        solver: unbalanced
