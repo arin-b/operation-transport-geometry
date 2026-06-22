@@ -1,0 +1,53 @@
+base_config: configs/default.yaml
+methods:
+  - otg
+  - toalign
+  - mlot
+  - srw
+  - irm
+  - group_dro
+  - spo
+worlds:
+  - synthetic_dag
+seed_count_main: 1
+seed_count_stress: 0
+shared_seed_stride: 1000
+solver: masked_sinkhorn
+benchmark:
+  cost_mode: full
+  otg_cost_mode: adaptive_node_pair
+  otg_solver: auto
+  solver: auto
+  weights:
+    geometry: 1.0
+    risk: 1.5
+    terminal: 1.0
+    operational: 1.0
+    nuisance: 0.2
+
+  dangerous_unmatched:
+    enabled: true
+    target_domain: occlusion
+    domain_name_fallback: false
+    solver: unbalanced
+    high_risk_threshold: 0.50
+    dangerous_mass_gap_threshold: 0.12
+    min_target_danger_rate: 0.12
+    risk_shift_threshold: 0.10
+  claims:
+    harmless_pairs:
+      - [clear, viewpoint_shift]
+    harmful_pairs:
+      - [clear, glare]
+      - [clear, occlusion]
+      - [viewpoint_shift, occlusion]
+    dangerous_target_domain: occlusion
+    dangerous_unmatched_target: 0.15
+    forbidden_mass_tolerance: 0.0001
+    false_collapse_tolerance: 0.15
+    marginal_error_tolerance: 0.10
+    risk_mae_tolerance: 0.25
+  localization_expectations:
+    clear::glare: [measurement]
+    clear::occlusion: [measurement, representation]
+    viewpoint_shift::occlusion: [measurement, representation]

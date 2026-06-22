@@ -1,29 +1,18 @@
 base_config: configs/default.yaml
 worlds:
-  - name: harmless_nuisance
-  - name: harmful_boundary
-  - name: invariance_misspecification
-  - name: risk_degradation
+  - name: synthetic_dag
     overrides:
-      risk:
-        mode: noisy
-  - name: sample_complexity
-    overrides:
-      runtime:
-        preset: fast
-  - name: high_dimensional
-    overrides:
-      world:
-        dim: 20
-      cost:
-        mode: operational_only
-  - name: admissibility_stress
-    overrides:
-      admissibility:
-        mode: hard
-  - name: unbalanced_dangerous_mass
+      transport:
+        solver: masked_sinkhorn
+      projection:
+        use_aligned: true
+  - name: synthetic_dag
     overrides:
       transport:
         solver: unbalanced
-      admissibility:
-        mode: hybrid
+      projection:
+        use_aligned: true
+  - name: synthetic_dag
+    overrides:
+      projection:
+        use_aligned: false

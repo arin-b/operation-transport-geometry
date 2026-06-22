@@ -15,7 +15,7 @@ The compatibility object is not semantic compatibility. It is admissible invaria
 
 `lp`: exact balanced linear-program OT with hard support constraints.  
 `sinkhorn`: plain entropic OT, intentionally ignores the mask. This is useful as a baseline.  
-`masked_sinkhorn`: entropic OT with forbidden entries given a large cost.  
+`masked_sinkhorn`: entropic OT on the admissible support, with forbidden entries zeroed in the kernel to avoid numerical leakage.  
 `unbalanced`: risk-aware unbalanced OT using POT when available, with a trimmed-Sinkhorn fallback.
 
 ## Unmatched mass interpretation

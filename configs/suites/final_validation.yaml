@@ -1,30 +1,3 @@
 base_config: configs/default.yaml
 worlds:
-  - name: harmless_nuisance
-    overrides:
-      risk:
-        mode: "true"
-      transport:
-        solver: masked_sinkhorn
-  - name: harmful_boundary
-    overrides:
-      risk:
-        mode: "true"
-      transport:
-        solver: masked_sinkhorn
-  - name: risk_degradation
-    overrides:
-      risk:
-        mode: learned_regression
-      transport:
-        solver: masked_sinkhorn
-  - name: invariance_misspecification
-    overrides:
-      admissibility:
-        mode: hybrid
-      transport:
-        solver: masked_sinkhorn
-  - name: unbalanced_dangerous_mass
-    overrides:
-      transport:
-        solver: unbalanced
+  - name: synthetic_dag

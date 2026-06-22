@@ -23,6 +23,7 @@ dev = ["pytest>=7.0"]
 
 [project.scripts]
 otg = "otg.cli:main"
+otg-benchmark = "benchmarks.cli:main"
 
 [tool.setuptools.packages.find]
-include = ["otg*"]
+include = ["otg*", "benchmarks*"]

@@ -1,7 +1,11 @@
 from __future__ import annotations
 
 from pathlib import Path
+import shutil
 import numpy as np
+import matplotlib
+
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 
@@ -27,7 +31,10 @@ def plot_run_outputs(out_dir: str | Path, artifact, batch) -> None:
         plot_matrix(res.cost.invariance, fig / f"{node_name}_cost_invariance.png", f"{node_name}: invariance cost")
         plot_matrix(res.invariance.allowed.astype(float), fig / f"{node_name}_admissibility_mask.png", f"{node_name}: admissibility mask")
         plot_matrix(res.invariance.soft_score, fig / f"{node_name}_invariance_soft_score.png", f"{node_name}: invariance soft score")
-        plot_matrix(res.transport.plan, fig / f"{node_name}_transport_plan.png", f"{node_name}: transport plan")
+        transport_plan_path = fig / f"{node_name}_transport_plan.png"
+        plot_matrix(res.transport.plan, transport_plan_path, f"{node_name}: transport plan")
+        if node_name == "repr":
+            shutil.copyfile(transport_plan_path, fig / "repr_transport_plan.png")
         plot_diagnostics_bar(res.diagnostics, fig / f"{node_name}_diagnostics_bar.png", node_name)
         plot_unmatched(res, fig / f"{node_name}_unmatched_mass.png", node_name)
         if node.z_a.shape[1] >= 2:

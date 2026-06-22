@@ -1,17 +1,17 @@
-from otg.utils.config import load_config
-from otg.utils.config import deep_merge
+from otg.utils.config import load_config, deep_merge
 from otg.core.pipeline import run_pipeline
 
 
 def test_modes_run(tmp_path):
     cfg = load_config("configs/default.yaml")
     cfg = deep_merge(cfg, {
-        "world": {"name": "harmless_nuisance"},
+        "world": {"name": "synthetic_dag"},
         "risk": {"mode": "noisy"},
         "admissibility": {"mode": "adaptive"},
         "transport": {"solver": "sinkhorn"},
+        "runtime_values": {"n": 24, "mc_rollouts": 8},
     })
     artifact = run_pipeline(cfg, tmp_path)
-    diag = artifact.node_results["repr"].diagnostics
-    assert "risk_estimation_mae" in diag
-    assert diag["allowed_pair_fraction"] >= 0.0
+    row = artifact.node_pair_table[0]
+    assert "risk_estimation_mae" in row
+    assert row["allowed_pair_fraction"] >= 0.0

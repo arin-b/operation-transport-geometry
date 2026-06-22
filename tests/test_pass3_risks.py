@@ -2,14 +2,15 @@ from otg.utils.config import load_config, deep_merge
 from otg.utils.seeding import SeedBank
 from otg.worlds.registry import make_world
 from otg.risks.registry import make_risk_model
+from otg.core.graph_ops import derive_pairwise_problem
 
 
 def test_all_risk_modes_return_common_contract():
     cfg = load_config("configs/default.yaml")
-    cfg = deep_merge(cfg, {"runtime_values": {"n": 30, "mc_rollouts": 8}, "world": {"name": "risk_degradation"}})
-    world = make_world("risk_degradation", cfg, SeedBank(222))
+    cfg = deep_merge(cfg, {"runtime_values": {"n": 30, "mc_rollouts": 8}, "world": {"name": "synthetic_dag"}})
+    world = make_world("synthetic_dag", cfg, SeedBank(222))
     batch = world.generate()
-    node = batch.nodes["repr"]
+    node = derive_pairwise_problem(batch, "measurement", "clear", "glare")
 
     modes = ["true", "noisy", "rollout", "learned_regression", "learned_classifier", "learned_mlp", "misspecified"]
     for mode in modes:
@@ -26,12 +27,8 @@ def test_all_risk_modes_return_common_contract():
 def test_learned_risk_pipeline_runs(tmp_path):
     from otg.core.pipeline import run_pipeline
     cfg = load_config("configs/default.yaml")
-    cfg = deep_merge(cfg, {
-        "world": {"name": "risk_degradation"},
-        "risk": {"mode": "learned_regression"},
-        "runtime_values": {"n": 40, "mc_rollouts": 8},
-    })
+    cfg = deep_merge(cfg, {"risk": {"mode": "learned_regression"}, "runtime_values": {"n": 40, "mc_rollouts": 8}})
     artifact = run_pipeline(cfg, tmp_path)
-    diag = artifact.node_results["repr"].diagnostics
-    assert "risk_calibration_error" in diag
-    assert "risk_failure_accuracy" in diag
+    row = artifact.node_pair_table[0]
+    assert "risk_calibration_error" in row
+    assert "risk_failure_accuracy" in row

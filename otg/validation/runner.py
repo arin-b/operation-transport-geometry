@@ -2,35 +2,25 @@ from __future__ import annotations
 
 from pathlib import Path
 import csv
-import json
-from dataclasses import asdict
 
 from otg.core.pipeline import run_pipeline
 from otg.utils.config import load_config, deep_merge
 from otg.utils.io import ensure_dir, save_json
-from otg.validation.expectations import artifact_checks, reproducibility_check, ValidationCheck
+from otg.validation.expectations import graph_artifact_checks, reproducibility_check, ValidationCheck
 
 
 VALIDATION_CASES: list[dict] = [
     {
-        "name": "harmless_nuisance_core",
-        "overrides": {"world": {"name": "harmless_nuisance"}, "risk": {"mode": "true"}, "transport": {"solver": "masked_sinkhorn"}},
+        "name": "graph_masked_sinkhorn",
+        "overrides": {"world": {"name": "synthetic_dag"}, "risk": {"mode": "true"}, "transport": {"solver": "masked_sinkhorn"}},
     },
     {
-        "name": "harmful_boundary_core",
-        "overrides": {"world": {"name": "harmful_boundary"}, "risk": {"mode": "true"}, "transport": {"solver": "masked_sinkhorn"}},
+        "name": "graph_unbalanced_dangerous_mass",
+        "overrides": {"world": {"name": "synthetic_dag"}, "risk": {"mode": "true"}, "transport": {"solver": "unbalanced"}},
     },
     {
-        "name": "risk_degradation_noisy",
-        "overrides": {"world": {"name": "risk_degradation"}, "risk": {"mode": "noisy"}, "transport": {"solver": "masked_sinkhorn"}},
-    },
-    {
-        "name": "invariance_misspecification_core",
-        "overrides": {"world": {"name": "invariance_misspecification"}, "risk": {"mode": "true"}, "transport": {"solver": "masked_sinkhorn"}},
-    },
-    {
-        "name": "unbalanced_dangerous_mass_core",
-        "overrides": {"world": {"name": "unbalanced_dangerous_mass"}, "risk": {"mode": "true"}, "transport": {"solver": "unbalanced"}},
+        "name": "graph_projection_off",
+        "overrides": {"world": {"name": "synthetic_dag"}, "projection": {"use_aligned": False}, "transport": {"solver": "masked_sinkhorn"}},
     },
 ]
 
@@ -45,26 +35,27 @@ def run_validation(out_dir: str | Path, *, preset: str = "fast", seed: int = 0, 
         cfg = deep_merge(base, case["overrides"])
         cfg = deep_merge(cfg, {
             "runtime": {"preset": preset},
-            "runtime_values": {"n": 36 if preset == "fast" else 80, "mc_rollouts": 16 if preset == "fast" else 64},
+            "runtime_values": {"n": 48 if preset == "fast" else 100, "mc_rollouts": 16 if preset == "fast" else 64},
             "seed": {"master": seed + 1000 * i},
         })
         case_dir = out / case["name"]
         artifact = run_pipeline(cfg, case_dir)
-        checks.extend(artifact_checks(case["name"], artifact))
+        checks.extend(graph_artifact_checks(case["name"], artifact))
         case_summaries.append({
             "case": case["name"],
             "world": artifact.world_name,
             "system_score": artifact.system_score,
+            "domain_order": artifact.domain_order,
+            "selected_nodes": artifact.selected_nodes,
             "out": str(case_dir),
         })
 
-    # Reproducibility check on a small deterministic case.
     repro_cfg = deep_merge(base, {
-        "world": {"name": "harmful_boundary"},
+        "world": {"name": "synthetic_dag"},
         "risk": {"mode": "true"},
         "transport": {"solver": "masked_sinkhorn"},
         "runtime": {"preset": preset},
-        "runtime_values": {"n": 32, "mc_rollouts": 8},
+        "runtime_values": {"n": 40, "mc_rollouts": 8},
         "seed": {"master": seed + 99991},
     })
     a = run_pipeline(repro_cfg, out / "repro_a")
@@ -102,7 +93,7 @@ def _write_csv(path: Path, checks: list[ValidationCheck]) -> None:
 
 def _write_markdown(path: Path, summary: dict) -> None:
     lines = [
-        "# OTG Validation Report",
+        "# OTG Graph-Level Validation Report",
         "",
         f"Status: `{summary['status']}`",
         f"Checks: `{summary['num_checks']}`",
@@ -113,7 +104,7 @@ def _write_markdown(path: Path, summary: dict) -> None:
         "",
     ]
     for case in summary["cases"]:
-        lines.append(f"- `{case['case']}` -> world `{case['world']}`, system score `{case['system_score']['value']:.6f}`")
+        lines.append(f"- `{case['case']}` -> world `{case['world']}`, domains `{case['domain_order']}`, nodes `{case['selected_nodes']}`, score `{case['system_score']['value']:.6f}`")
     lines.extend(["", "## Failed checks", ""])
     failed = [c for c in summary["checks"] if not c["passed"]]
     if not failed:

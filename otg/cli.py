@@ -39,10 +39,10 @@ def parser() -> argparse.ArgumentParser:
     s = sub.add_parser("run", help="Run one controlled operational world.")
     s.add_argument("--config", default="configs/default.yaml")
     s.add_argument("--world", default=None)
-    s.add_argument("--solver", default=None, choices=["lp", "sinkhorn", "masked_sinkhorn", "unbalanced"])
+    s.add_argument("--solver", default=None, choices=["auto", "lp", "sinkhorn", "masked_sinkhorn", "unbalanced"])
     s.add_argument("--risk-mode", default=None, choices=["true", "noisy", "rollout", "misspecified", "learned_regression", "learned_classifier", "learned_mlp"])
     s.add_argument("--admissibility", default=None, choices=["hard", "soft", "hybrid", "adaptive"])
-    s.add_argument("--cost-mode", default=None, choices=["geometry", "geometry_risk", "geometry_output_risk", "operational_only", "full"])
+    s.add_argument("--cost-mode", default=None, choices=["geometry", "geometry_risk", "geometry_output_risk", "operational_only", "adaptive_operational", "domain_pair_adaptive", "adaptive_node_pair", "full"])
     s.add_argument("--preset", default=None, choices=["fast", "default", "heavy"])
     s.add_argument("--seed", type=int, default=None)
     s.add_argument("--out", default="runs/custom")
@@ -86,15 +86,15 @@ def main() -> None:
     if args.cmd == "sanity":
         cfg = load_config("configs/default.yaml")
         cfg = deep_merge(cfg, {
-            "world": {"name": "harmless_nuisance"},
+            "world": {"name": "synthetic_dag"},
             "runtime": {"preset": "fast"},
-            "runtime_values": {"n": 36, "mc_rollouts": 16},
-            "transport": {"solver": "masked_sinkhorn"},
+            "runtime_values": {"n": 48, "mc_rollouts": 16},
+            "transport": {"solver": "auto"},
             "risk": {"mode": "true"},
             "seed": {"master": 123},
         })
         run_pipeline(cfg, args.out)
-        print(f"Sanity complete: {args.out}")
+        print(f"Graph-level sanity complete: {args.out}")
         return
 
     if args.cmd == "run-default":
@@ -151,15 +151,17 @@ def main() -> None:
 def _artifact_summary_for_suite(artifact):
     return {
         "world": artifact.world_name,
+        "pipeline": "graph_level_otg",
         "system_score": artifact.system_score,
-        "nodes": {
-            k: {
-                "transport_value": float(v.transport.value),
-                "solver": v.transport.solver,
-                "status": v.transport.status,
-                "diagnostics": v.diagnostics,
+        "domains": artifact.domain_order,
+        "selected_nodes": artifact.selected_nodes,
+        "D_op_matrix": artifact.discrepancy_matrix.tolist(),
+        "comparisons": {
+            f"{a}::{b}": {
+                "aggregate": comp.aggregate,
+                "diagnostics": comp.diagnostics,
             }
-            for k, v in artifact.node_results.items()
+            for (a, b), comp in artifact.comparisons.items()
         },
     }
 

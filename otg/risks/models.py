@@ -37,10 +37,25 @@ class RolloutRisk(RiskModel):
         mc = int(self.cfg.get("runtime_values", {}).get("mc_rollouts", self.cfg.get("risk", {}).get("mc_rollouts", 64)))
         threshold = float(self.cfg.get("world", {}).get("failure_threshold", 0.75))
         sigma = float(self.cfg.get("uncertainty", {}).get("rollout_terminal_noise", self.cfg.get("uncertainty", {}).get("terminal_noise", 0.12)))
-        ya = node.terminal_a[:, None] + rng.normal(0.0, sigma, (len(node.terminal_a), mc))
-        yb = node.terminal_b[:, None] + rng.normal(0.0, sigma, (len(node.terminal_b), mc))
-        a = (ya > threshold).mean(axis=1)
-        b = (yb > threshold).mean(axis=1)
+        ta = node.terminal_a.reshape(len(node.terminal_a), -1)
+        tb = node.terminal_b.reshape(len(node.terminal_b), -1)
+        if ta.shape[1] >= 4:
+            ya = ta[:, None, :] + rng.normal(0.0, sigma, (len(ta), mc, ta.shape[1]))
+            yb = tb[:, None, :] + rng.normal(0.0, sigma, (len(tb), mc, tb.shape[1]))
+            def terminal_failure_prob(Y):
+                adequacy = Y[..., 0]
+                coverage = Y[..., 1]
+                glare = Y[..., 2]
+                uncertainty = Y[..., 3]
+                score = 3.2 * (0.58 - adequacy) + 2.5 * (0.55 - coverage) + 1.7 * glare + 1.2 * uncertainty
+                return 1.0 / (1.0 + np.exp(-score))
+            a = terminal_failure_prob(ya).mean(axis=1)
+            b = terminal_failure_prob(yb).mean(axis=1)
+        else:
+            ya = ta[:, :1] + rng.normal(0.0, sigma, (len(ta), mc))
+            yb = tb[:, :1] + rng.normal(0.0, sigma, (len(tb), mc))
+            a = (ya > threshold).mean(axis=1)
+            b = (yb > threshold).mean(axis=1)
         out = make_risk_output(self.mode, node, a, b, {"mc_rollouts": mc, "rollout_terminal_noise": sigma})
         out.uncertainty_a = np.sqrt(np.maximum(a * (1.0 - a), 0.0) / max(mc, 1))
         out.uncertainty_b = np.sqrt(np.maximum(b * (1.0 - b), 0.0) / max(mc, 1))

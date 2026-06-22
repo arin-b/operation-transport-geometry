@@ -1,30 +1,104 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field, asdict
-from typing import Any, Mapping
+from dataclasses import dataclass, field
+from typing import Any
 import numpy as np
-
 
 Array = np.ndarray
 
 
 @dataclass(frozen=True)
 class DomainSpec:
-    """A deployment domain represented by a name and sampling metadata."""
+    """Deployment domain d with input-law metadata P_d."""
     name: str
+    id: str | None = None
     metadata: dict[str, Any] = field(default_factory=dict)
+    input_law_metadata: dict[str, Any] = field(default_factory=dict)
+
+    @property
+    def domain_id(self) -> str:
+        return self.id or self.name
 
 
 @dataclass
-class NodeBatch:
-    """Empirical node law plus all fields needed by the OTG pipeline.
+class NodeLaw:
+    """Empirical node-wise law mu_v^d and aligned law mutilde_v^d for one node/domain."""
+    node: str
+    domain: str
+    samples: Array
+    aligned_samples: Array
+    terminal_outputs: Array
+    true_risk: Array
+    used_risk: Array
+    operational_coords: Array
+    nuisance_coords: Array
+    descriptor_coords: Array
+    semantic_anchors: Array
+    mass: Array
+    failure: Array
+    projection_metadata: dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
-    `z_a` and `z_b` are samples from two domain-induced node laws.
-    `terminal_a` and `terminal_b` are downstream terminal outputs induced by those states.
-    `true_risk_*` is retained as the audit ground truth.
-    `used_risk_*` is what the algorithm is allowed to use.
+    def validate(self) -> None:
+        n = len(self.samples)
+        checks = [
+            (self.aligned_samples, n, "aligned_samples"),
+            (self.terminal_outputs, n, "terminal_outputs"),
+            (self.true_risk, n, "true_risk"),
+            (self.used_risk, n, "used_risk"),
+            (self.operational_coords, n, "operational_coords"),
+            (self.nuisance_coords, n, "nuisance_coords"),
+            (self.descriptor_coords, n, "descriptor_coords"),
+            (self.semantic_anchors, n, "semantic_anchors"),
+            (self.mass, n, "mass"),
+            (self.failure, n, "failure"),
+        ]
+        for arr, expected, name in checks:
+            if len(arr) != expected:
+                raise ValueError(f"{self.node}/{self.domain}: {name} has length {len(arr)} but expected {expected}")
+        if not np.isclose(np.sum(self.mass), 1.0):
+            raise ValueError(f"{self.node}/{self.domain}: mass must sum to 1")
+
+
+@dataclass
+class GraphWorldBatch:
+    """Proposal-aligned graph-level world: DAG, domains, selected nodes, and node laws."""
+    name: str
+    graph: dict[str, Any]
+    domains: dict[str, DomainSpec]
+    selected_nodes: list[str]
+    node_laws: dict[tuple[str, str], NodeLaw]
+    projection_metadata: dict[str, Any] = field(default_factory=dict)
+    terminal_evaluation_metadata: dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
+
+    def validate(self) -> None:
+        if len(self.domains) < 2:
+            raise ValueError("GraphWorldBatch must contain at least two deployment domains")
+        if len(self.selected_nodes) < 1:
+            raise ValueError("GraphWorldBatch must contain selected internal nodes")
+        for node in self.selected_nodes:
+            for domain in self.domains:
+                key = (node, domain)
+                if key not in self.node_laws:
+                    raise ValueError(f"Missing NodeLaw for node={node!r}, domain={domain!r}")
+                self.node_laws[key].validate()
+
+    def law(self, node: str, domain: str) -> NodeLaw:
+        return self.node_laws[(node, domain)]
+
+    @property
+    def domain_ids(self) -> list[str]:
+        return list(self.domains.keys())
+
+
+@dataclass
+class PairwiseNodeProblem:
+    """Internal pairwise compatibility object derived from GraphWorldBatch.
+
+    This preserves the old low-level solver/cost/risk API. It is not the primary
+    mathematical object; it represents one (v, d, d') comparison.
     """
-
     node: str
     z_a: Array
     z_b: Array
@@ -46,6 +120,12 @@ class NodeBatch:
     mass_b: Array
     failure_a: Array
     failure_b: Array
+    domain_a: str = "domain_a"
+    domain_b: str = "domain_b"
+    raw_z_a: Array | None = None
+    raw_z_b: Array | None = None
+    projection_a: dict[str, Any] = field(default_factory=dict)
+    projection_b: dict[str, Any] = field(default_factory=dict)
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def validate(self) -> None:
@@ -64,24 +144,28 @@ class NodeBatch:
         ]
         for arr, expected, name in checks:
             if len(arr) != expected:
-                raise ValueError(f"{name} has length {len(arr)} but expected {expected}")
+                raise ValueError(f"{self.node}/{self.domain_a}->{self.domain_b}: {name} has length {len(arr)} but expected {expected}")
         if not np.isclose(np.sum(self.mass_a), 1.0):
             raise ValueError("mass_a must sum to 1")
         if not np.isclose(np.sum(self.mass_b), 1.0):
             raise ValueError("mass_b must sum to 1")
 
 
+# Old low-level modules import NodeBatch; keep that as the internal pairwise object.
+NodeBatch = PairwiseNodeProblem
+
+
 @dataclass
 class WorldBatch:
-    """Generated controlled operational world."""
+    """Legacy two-domain pairwise world, retained for internal/backward compatibility only."""
     name: str
     domains: tuple[DomainSpec, DomainSpec]
-    nodes: dict[str, NodeBatch]
+    nodes: dict[str, PairwiseNodeProblem]
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def validate(self) -> None:
         if not self.nodes:
-            raise ValueError("WorldBatch must contain at least one node")
+            raise ValueError("WorldBatch must contain at least one pairwise node problem")
         for node in self.nodes.values():
             node.validate()
 
@@ -144,6 +228,7 @@ class TransportResult:
 
 @dataclass
 class NodeRunResult:
+    """Legacy/internal pairwise node result."""
     node: str
     cost: CostOutput
     invariance: InvarianceOutput
@@ -152,10 +237,42 @@ class NodeRunResult:
 
 
 @dataclass
-class RunArtifact:
+class NodePairResult:
+    node: str
+    domain_pair: tuple[str, str]
+    cost: CostOutput
+    invariance: InvarianceOutput
+    transport: TransportResult
+    diagnostics: dict[str, Any]
+    pairwise_problem: PairwiseNodeProblem | None = None
+
+
+@dataclass
+class SystemComparisonResult:
+    domain_pair: tuple[str, str]
+    node_results: dict[str, NodePairResult]
+    aggregate: dict[str, Any]
+    diagnostics: dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class GraphRunArtifact:
     config: dict[str, Any]
     world_name: str
-    node_results: dict[str, NodeRunResult]
+    graph: dict[str, Any]
+    domains: dict[str, DomainSpec]
+    selected_nodes: list[str]
+    comparisons: dict[tuple[str, str], SystemComparisonResult]
+    discrepancy_matrix: Array
+    domain_order: list[str]
+    node_pair_table: list[dict[str, Any]]
     system_score: dict[str, Any]
     assumption_report: dict[str, Any]
     metadata: dict[str, Any] = field(default_factory=dict)
+    # Compatibility field: first domain-pair node results, not the primary object.
+    node_results: dict[str, NodeRunResult] = field(default_factory=dict)
+
+
+# Old artifact name now points to the graph-level artifact. Pairwise code should use
+# NodeRunResult directly or run_pairwise_pipeline.
+RunArtifact = GraphRunArtifact

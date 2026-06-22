@@ -1,3 +1,41 @@
+# operation-transport-geometry
+
+## Final algorithm status
+
+The default implementation is now **adaptive node-sensitive graph OTG**. It operates on a deployed DAG with multiple deployment domains and node-wise laws, uses pairwise OT only as an internal numerical primitive, applies node/domain-pair adaptive operational costs, activates unbalanced transport for terminally induced dangerous unmatched mass, and aggregates node discrepancies with terminal-sensitivity weights.
+
+Final validation: `33 passed` tests; graph validation `332 checks, 0 errors, 0 warnings`; final 5-seed graph-tensor benchmark ranks OTG first on the primary claim average with `0.979`.
+
+
+This repository now implements **Operational Transport Geometry over a deployed finite DAG**. The primary pipeline is graph-level: multiple deployment domains induce node-wise laws on multiple internal nodes; pairwise OT problems are derived only as an internal compatibility layer for costs, admissibility, and solvers.
+
+The default world is `synthetic_dag`, with domains `clear`, `viewpoint_shift`, `glare`, and `occlusion`; nodes `input`, `detector`, `representation`, `measurement`, and terminal `audit_report`; and selected internal nodes `detector`, `representation`, and `measurement`.
+
+Key outputs include `D_op_matrix.csv`, `node_pair_metrics.csv`, graph-level reports, domain-pair heatmaps, node-by-domain-pair heatmaps, admissibility masks, transport plans, risk distributions, and dangerous-unmatched-mass diagnostics.
+
+See `notes/proposal_implementation_mapping.md` for the implementation mapping to the proposal notation.
+
+## Graph-domain-node benchmark update
+
+The literature benchmark now evaluates the full tensor `W[v,i,j]` and system matrix `D_op[i,j]`. Pairwise OT remains only the numerical primitive. The benchmark now writes claim-specific scores, per-method domain matrices, dangerous-unmatched-mass matrices, and an OTG cost-weight inspection report. See `notes/graph_tensor_benchmark.md`.
+
+## Domain-pair adaptive OTG cost
+
+The default OTG cost mode is now `domain_pair_adaptive`. For every derived `(node, domain_i, domain_j)` transport problem, OTG computes a terminally induced gate from risk shift, terminal-output shift, and failure-rate shift. Harmless nuisance-dominated comparisons receive relaxed operational/risk/invariance weights; harmful comparisons revert toward the conservative OTG weights. The gate is not domain-name-specific. See `notes/domain_pair_adaptive_cost.md`.
+
+
+## Quick start
+
+```bash
+pip install -e .
+otg sanity
+otg validate --preset fast
+otg run-default --preset fast
+python -m benchmarks.cli run --config configs/suites/literature_benchmark.yaml --out runs/literature_benchmark
+```
+
+---
+
 # otg-testbed
 
 `otg-testbed` is a mathematical testbed for Operational Transport Geometry.

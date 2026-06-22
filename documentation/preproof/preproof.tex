@@ -1145,4 +1145,115 @@ The paper should be written in dependency order rather than presentation order. 
 
 Only after these are fixed should the paper write the transport layer: operational costs, admissible couplings, balanced and unbalanced node-wise transport, and system-level aggregation. The next dependency is interpretation: zero value, operational equivalence, quotient status, and anti-collapse requirements. After this come canonical examples, the streetlight instantiation, theorem statements, related work, limitations, and final introduction polishing. The introduction should be written last in its final form, because the exact contribution boundary depends on the completed formal construction.
 
+
+\section*{Implementation Addendum. Adaptive Node-Sensitive Graph OTG}
+\addcontentsline{toc}{section}{Implementation Addendum. Adaptive Node-Sensitive Graph OTG}
+
+\subsection*{Mathematical object implemented}
+
+The final implementation should be read as an algorithmic instantiation of Operational Transport Geometry on a deployed finite graph, not as a two-domain feature-alignment proxy. The primitive object is
+\[
+\mathcal B=(G,D,V_{\mathrm{sel}},\{\mu_v^d\}_{v\in V_{\mathrm{sel}},d\in D},\{\phi_v^d\}_{v,d},\{r_v^d\}_{v,d}),
+\]
+where \(G=(V,E)\) is the deployed DAG, \(D\) is the set of deployment domains, \(\mu_v^d=(\Phi_v)_\#P_d\) is the empirical node-wise law induced by pushing the input law \(P_d\) through the graph, and \(\phi_v^d:M_v^{(d)}\to\widetilde M_v\) is an optional alignment map into a shared node space. Pairwise transport is used only as the numerical primitive needed to populate the tensor
+\[
+\mathcal W_{vij}=W_{v,op}(\widetilde\mu_v^{d_i},\widetilde\mu_v^{d_j}),
+\qquad
+\widetilde\mu_v^d=(\phi_v^d)_\#\mu_v^d.
+\]
+The system-level object is therefore a domain-domain matrix
+\[
+D_{op}(d_i,d_j)=A\bigl(\{\mathcal W_{vij}:v\in V_{\mathrm{sel}}\}\bigr),
+\]
+not a single source-target comparison.
+
+\subsection*{Node-sensitive domain-pair adaptive ground cost}
+
+For each node \(v\) and domain pair \((d_i,d_j)\), the implementation constructs a ground cost
+\[
+c^{ij}_{v,op}(z,z')=
+\lambda^{ij}_v c_{geom}(z,z')+
+\alpha^{ij}_v c_{risk}(z,z')+
+\beta^{ij}_v c_{term}(z,z')+
+\eta^{ij}_v c_{adm}(z,z')+
+\gamma^{ij}_v c_{node}(z,z')+
+\xi^{ij}_v c_{nuis}(z,z').
+\]
+The weights are not globally fixed. They are induced by terminal behavior through the shifts
+\[
+\Delta r_{vij}=|\mathbb E_{d_i}\hat r_v-\mathbb E_{d_j}\hat r_v|,
+\quad
+\Delta y_{ij}=\|\mathbb E_{d_i}Y_{op}-\mathbb E_{d_j}Y_{op}\|,
+\quad
+\Delta f_{ij}=|\mathbb P_{d_i}(F)-\mathbb P_{d_j}(F)|.
+\]
+The activation gate is
+\[
+g_{vij}=\sigma\left(
+ b+
+ a_r\frac{\Delta r_{vij}-\tau_r}{s_r}+
+ a_y\frac{\Delta y_{ij}-\tau_y}{s_y}+
+ a_f\frac{\Delta f_{ij}-\tau_f}{s_f}
+\right).
+\]
+For each cost component \(k\), the effective weight is
+\[
+w^{ij}_{v,k}=w^{\min}_{v,k}+g_{vij}\bigl(w^{\max}_{v,k}-w^{\min}_{v,k}\bigr).
+\]
+Thus harmless nuisance shifts use relaxed operational penalties, while shifts that alter risk, terminal outputs, or failure rates recover conservative operational geometry. This is not a domain-name rule; the gate is computed from terminally induced quantities.
+
+\subsection*{Quotient-style nuisance relaxation}
+
+If a pair has high nuisance drift but low terminal/risk/failure shift, the implementation applies a continuous quotient-style relaxation. Let
+\[
+q_{vij}=\frac{\Delta n_{vij}}{\Delta o_{vij}+\Delta y_{ij}+\Delta r_{vij}+\varepsilon},
+\qquad
+h_{vij}=(1-g_{vij})\sigma(a_n(q_{vij}-\tau_n)).
+\]
+Then nuisance and geometric weights are multiplied by
+\[
+1-\rho h_{vij}.
+\]
+This implements the intended quotient intuition: directions that are empirically nuisance-like under terminal behavior should not dominate the operational discrepancy.
+
+\subsection*{Hybrid admissibility and adaptive unbalanced transport}
+
+The admissible coupling class is implemented as a hybrid hard/soft relation. Severe operational or risk incompatibilities define hard exclusions,
+\[
+\pi(z,z')=0\quad\text{whenever }A^{ij}_v(z,z')=0,
+\]
+while softer descriptor or compatibility disagreement enters through an additional penalty. This avoids treating every descriptor mismatch as absolute while still preventing forbidden high-risk collapse.
+
+Balanced transport is used when full mass matching is operationally appropriate. Unbalanced transport is activated when the node-pair has evidence of unmatched dangerous mass, for example when
+\[
+\left|\mathbb P_{d_i}(r_v>\tau)-\mathbb P_{d_j}(r_v>\tau)\right|>\tau_u
+\]
+or when high-risk mass is structurally inadmissible. The unmatched dangerous mass is reported as its own tensor
+\[
+U_{vij}=U_v(d_i,d_j),
+\]
+rather than being hidden inside the scalar transport value.
+
+\subsection*{Terminal-sensitivity aggregation and null-corrected localization}
+
+System aggregation is terminal-sensitivity weighted. For a node \(v\), the implementation estimates a sensitivity proxy
+\[
+s_v\approx \mathbb E\left\|\frac{\partial E_{op}}{\partial z_v}\right\|,
+\]
+using correlations between node operational coordinates, terminal outputs, and induced risk in the synthetic testbed. The system discrepancy is
+\[
+D_{op}(d_i,d_j)=\sum_{v\in V_{\mathrm{sel}}}\omega^{ij}_v W_{v,op}(d_i,d_j),
+\qquad
+\omega^{ij}_v\propto s_v\bigl(\Delta r_{vij}+\Delta y_{ij}+\Delta f_{ij}+\varepsilon\bigr).
+\]
+Localization uses a null-corrected excess score rather than raw node transport:
+\[
+L_{vij}=s_v e_{vij}\left[W_{v,op}(d_i,d_j)-W^{null}_{vij}\right]_+,
+\]
+where \(e_{vij}\) is terminal evidence from the adaptive gate and \(W^{null}_{vij}\) is a nuisance/null baseline estimated from low-risk equivalent transport. The reported localizing node is
+\[
+\arg\max_{v\in V_{\mathrm{sel}}}L_{vij}.
+\]
+This prevents naturally noisy upstream representations from being incorrectly blamed when the terminal discrepancy is actually generated downstream.
+
 \end{document}

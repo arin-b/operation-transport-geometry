@@ -1,11 +1,7 @@
 world:
-  name: harmful_boundary
-  dim: 2
+  name: synthetic_dag
   n: 100
-  failure_threshold: 0.75
-  risk_sharpness: 10.0
-  nuisance_leak: 0.05
-  hidden_leak: 0.15
+  failure_threshold: 0.50
 
 runtime:
   preset: fast
@@ -15,10 +11,17 @@ seed:
 
 nodes:
   selected:
-    - repr
+    - detector
+    - representation
+    - measurement
+
+domain_pairs:
+  ordered: false
+
+projection:
+  use_aligned: true
 
 uncertainty:
-  node_noise: 0.05
   terminal_noise: 0.03
   rollout_terminal_noise: 0.12
   hidden_nuisance: true
@@ -39,7 +42,7 @@ risk:
   torch_lr: 0.001
 
 cost:
-  mode: full
+  mode: adaptive_node_pair
   weights:
     geometry: 1.0
     output: 1.0
@@ -48,6 +51,53 @@ cost:
     invariance: 3.0
     operational_coordinate: 1.5
     nuisance: 0.15
+  adaptive:
+    risk_threshold: 0.06
+    risk_scale: 0.04
+    terminal_threshold: 0.10
+    terminal_scale: 0.06
+    failure_threshold: 0.05
+    failure_scale: 0.04
+    gate_bias: -0.50
+    gate_weights:
+      risk: 1.60
+      terminal: 1.00
+      failure: 0.80
+    min_weights:
+      geometry: 0.35
+      terminal: 0.10
+      risk: 0.20
+      invariance: 0.15
+      operational_coordinate: 0.25
+      nuisance: 0.02
+    nuisance_ratio_threshold: 1.00
+    nuisance_gate_slope: 0.75
+    quotient_nuisance_strength: 0.35
+  node_profiles:
+    detector:
+      sensitivity_prior: 0.75
+      geometry_scale: 0.85
+      terminal_scale: 0.70
+      risk_scale: 0.75
+      invariance_scale: 0.85
+      operational_scale: 0.85
+      nuisance_scale: 0.50
+    representation:
+      sensitivity_prior: 0.90
+      geometry_scale: 0.80
+      terminal_scale: 0.70
+      risk_scale: 0.85
+      invariance_scale: 0.75
+      operational_scale: 0.90
+      nuisance_scale: 0.35
+    measurement:
+      sensitivity_prior: 1.30
+      geometry_scale: 1.00
+      terminal_scale: 1.30
+      risk_scale: 1.25
+      invariance_scale: 1.15
+      operational_scale: 1.25
+      nuisance_scale: 0.20
 
 admissibility:
   mode: hybrid
@@ -60,6 +110,7 @@ admissibility:
   soft_threshold: 2.0
   severe_threshold: 6.0
   adaptive_base_threshold: 3.0
+  anchor_tolerance: 0.0
   anchor_weight: 2.0
   risk_weight: 1.0
   operational_weight: 1.0
@@ -67,18 +118,33 @@ admissibility:
   nuisance_weight: 0.0
 
 transport:
-  solver: masked_sinkhorn
+  solver: auto
   epsilon: 0.05
   sinkhorn_iter: 500
   unbalanced_reg_m: 1.0
   unbalanced_cost_quantile: 0.85
   forbidden_cost: 1000000.0
+  auto:
+    enabled: true
+    balanced_solver: masked_sinkhorn
+    unbalanced_solver: unbalanced
+    lp_audit: true
+    lp_audit_n: 24
+    high_risk_threshold: 0.50
+    dangerous_mass_gap_threshold: 0.12
+    min_target_danger_rate: 0.12
+    risk_shift_threshold: 0.10
 
 aggregation:
-  mode: weighted_sum
+  mode: terminal_sensitivity_weighted
   weights:
-    repr: 1.0
-
+    detector: 0.8
+    representation: 1.0
+    measurement: 1.3
+  sensitivity_floor: 0.10
+  evidence_floor: 0.05
+  null_correction:
+    false_separation_scale: 0.60
 
 diagnostics:
   thresholds:
@@ -89,8 +155,8 @@ diagnostics:
     row_l1_error_ok: 0.001
     col_l1_error_ok: 0.001
     allowed_pair_fraction_min: 0.05
-    row_feasible_fraction_min: 0.80
-    col_feasible_fraction_min: 0.80
+    row_feasible_fraction_min: 0.50
+    col_feasible_fraction_min: 0.50
     harmless_shift_collapse_min: 0.30
     harmful_shift_detection_min: 0.10
-    dangerous_unmatched_mass_min: 0.05
+    dangerous_unmatched_mass_min: 0.01

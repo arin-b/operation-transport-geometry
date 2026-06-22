@@ -26,6 +26,19 @@ def _normalize(M: np.ndarray, eps: float = 1e-12) -> np.ndarray:
     return M / (scale + eps)
 
 
+def _adaptive_operational_factors(node: NodeData, op_dist: np.ndarray, nuisance_dist: np.ndarray) -> tuple[float, float, float]:
+    op_positive = op_dist[op_dist > 0]
+    nuisance_positive = nuisance_dist[nuisance_dist > 0]
+    op_scale = float(np.median(op_positive)) if op_positive.size else 1.0
+    nuisance_scale = float(np.median(nuisance_positive)) if nuisance_positive.size else 0.0
+    nuisance_ratio = nuisance_scale / max(op_scale, 1e-12)
+    risk_shift = abs(float(np.mean(node.used_risk_b) - np.mean(node.used_risk_a)))
+    op_boost = 1.0 + min(2.0, nuisance_ratio + 0.75 * risk_shift)
+    risk_boost = 1.0 + min(2.5, 2.5 * risk_shift + 0.5 * nuisance_ratio)
+    geometry_downweight = 1.0 / (1.0 + nuisance_ratio)
+    return op_boost, risk_boost, geometry_downweight
+
+
 def _pair_l2(A: np.ndarray, B: np.ndarray) -> np.ndarray:
     return cdist(A.reshape(len(A), -1), B.reshape(len(B), -1), metric="euclidean")
 
@@ -59,12 +72,34 @@ def build_operational_cost(node: NodeData, cfg: dict) -> CostPack:
         total = alpha * z_dist + beta * y_dist + gamma * r_dist
     elif mode == "operational_only":
         total = opw * op_dist + gamma * r_dist + beta * y_dist
+    elif mode == "adaptive_operational":
+        op_boost, risk_boost, geometry_downweight = _adaptive_operational_factors(node, op_dist, nuisance_dist)
+        total = (
+            (alpha * geometry_downweight) * z_dist
+            + beta * y_dist
+            + (gamma * risk_boost) * r_dist
+            + (opw * op_boost) * op_dist
+            + (nuisance_w * geometry_downweight) * nuisance_dist
+        )
+    elif mode == "domain_pair_adaptive":
+        risk_shift = abs(float(np.mean(node.used_risk_b) - np.mean(node.used_risk_a)))
+        output_shift = abs(float(np.mean(node.y_b) - np.mean(node.y_a)))
+        gate = 1.0 / (1.0 + np.exp(-(1.6 * ((risk_shift - 0.06) / 0.04) + ((output_shift - 0.10) / 0.06) - 0.5)))
+        total = (
+            (0.35 + gate * (alpha - 0.35)) * z_dist
+            + (0.10 + gate * (beta - 0.10)) * y_dist
+            + (0.20 + gate * (gamma - 0.20)) * r_dist
+            + (0.15 + gate * (lam - 0.15)) * invariance_penalty
+            + (0.25 + gate * (opw - 0.25)) * op_dist
+            + (0.02 + gate * (nuisance_w - 0.02)) * nuisance_dist
+        )
     elif mode == "full":
         total = (
             alpha * z_dist
             + beta * y_dist
             + gamma * r_dist
             + lam * invariance_penalty
+            + opw * op_dist
             + nuisance_w * nuisance_dist
         )
     else:

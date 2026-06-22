@@ -1,0 +1,4 @@
+world:
+  name: synthetic_dag
+nodes:
+  selected: [detector, representation, measurement]
