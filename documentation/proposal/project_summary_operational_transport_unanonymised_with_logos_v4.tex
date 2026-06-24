@@ -16,7 +16,7 @@
 \setlength{\parindent}{0pt}
 
 \newcommand{\IISCLogo}{\includegraphics[height=1.45cm]{assets/small_iisc_logo.png}}
-\newcommand{\RBCCPSLogo}{\includegraphics[height=1.35cm]{assets/small_rbccps_logo.png}}
+\newcommand{\RBCCPSLogo}{\includegraphics[width=0.95\linewidth,height=1.25cm,keepaspectratio]{assets/small_rbccps_logo_clean.png}}
 \begin{document}
 \twocolumn[{%
 \begin{center}
@@ -295,14 +295,6 @@ D_{\mathrm{op}}.
 \]
 In the manifold-specific version, the state spaces $\mathcal{Z}_v$ are replaced by representation manifolds $\mathcal{M}_v$. Thus domains induce distributions on node state spaces or node manifolds; terminal operational evaluation induces node-wise risk; node-wise risk defines operational regions; semantic compatibility and operational consequence define the tilted ground cost and admissible coupling class; and constrained or unbalanced transport compares domain-induced node distributions under this operational geometry.
 
-\begin{figure*}[t]
-    \centering
-    \includegraphics[width=0.96\textwidth]{assets/small_framework_diagram.png}
-    \caption{Schematic overview of the proposed framework. A finite computational DAG induces domain-specific node representations, which are aligned through projections into a shared node representation space equipped with operational geometry. Terminal operational evaluation induces node-wise risk, which shapes both the admissible coupling structure and the operational transport geometry used to compare or adapt domain-induced node distributions.}
-    \label{fig:framework}
-\end{figure*}
-
-
 \section{Research Questions}
 
 At theorem level, the central question is whether operational consequence can induce a valid geometry on representation distributions. More precisely, we ask under what assumptions a node-wise operational ground cost
@@ -401,5 +393,21 @@ Justin Elmachtoub and Paul Grigas.
 \newblock \emph{Management Science}, 2022.
 
 \end{thebibliography}
+
+\clearpage
+\onecolumn
+\thispagestyle{plain}
+\begin{center}
+\vspace*{\fill}
+\makebox[\textwidth][c]{%
+\rotatebox[origin=c]{90}{%
+\begin{minipage}{0.78\textheight}
+\centering
+\includegraphics[width=\linewidth]{assets/small_framework_diagram.png}
+\captionof{figure}{Schematic overview of the proposed framework. A finite computational DAG induces domain-specific node representations, which are aligned through projections into a shared node representation space equipped with operational geometry. Terminal operational evaluation induces node-wise risk, which shapes both the admissible coupling structure and the operational transport geometry used to compare or adapt domain-induced node distributions.}
+\label{fig:framework}
+\end{minipage}}}
+\vspace*{\fill}
+\end{center}
 
 \end{document}
